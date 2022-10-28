@@ -1,21 +1,23 @@
 build-jar: build
-	jar cvfm Mazedea.jar Manifest.txt -C bin .
+	jar cvfm Mazedea.jar Manifest.txt -C build .
 build: clear
-	javac -sourcepath src -d bin src/pl/kedar/mazedea/Mazedea.java
-	cp -r resources/ bin/pl/kedar/mazedea/
+	javac -sourcepath src -d build src/pl/kedarch/mazedea/Mazedea.java
+	cp -r resources/ build/pl/kedarch/mazedea/
 build-docker: build-jar
-	docker image rm -f pl.kedar.mazedea
-	docker build -t pl.kedar.mazedea .
+	docker image rm -f pl.kedarch.mazedea
+	docker build -t pl.kedarch.mazedea .
 run-docker: disclaimer-docker
-	@docker run -ti --rm --net=host pl.kedar.mazedea > /dev/null
+	@docker run -ti --rm --net=host pl.kedarch.mazedea > /dev/null
 run: build
-	java -cp bin pl.kedar.mazedea.Mazedea
+	@echo Running build
+	java -cp build pl.kedarch.mazedea.Mazedea
 run-jar: build-jar
+	@echo Running jar build
 	java -jar Mazedea.jar
 run-docker-new: build-docker disclaimer-docker
-	@docker run -ti --rm --net=host pl.kedar.mazedea > /dev/null
+	@docker run -ti --rm --net=host pl.kedarch.mazedea > /dev/null
 clear:
-	rm -rf bin Mazedea.jar
+	rm -rf build Mazedea.jar
 disclaimer-docker:
 	@echo "To reduce image size the app is run in virtual framebuffer"
 	@echo "without window management or compositing. Which means it's"

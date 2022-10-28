@@ -1,4 +1,4 @@
-package pl.kedar.mazedea;
+package pl.kedarch.mazedea;
 
 class Maze {
     private int x;

@@ -1,6 +1,6 @@
 # Compiled class file and folder
 *.class
-bin/
+build/
 
 # Log file
 *.log
