@@ -1,0 +1,2 @@
+Main-Class: pl.kedarch.mazedea.Mazedea
+Name: Mazedea
