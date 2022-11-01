@@ -6,10 +6,10 @@ package pl.kedarch.mazedea;
 public class Mazedea {
     /**
      * Function starting the app
-     * @param args
-     * command line arguments
+     * @param args command line arguments
+     * @throws Exception if programmer forgot something
      */
-    public static void main(final String[] args) {
+    public static void main(final String[] args) throws Exception {
         MazeController control = new MazeController();
         control.start();
     }
