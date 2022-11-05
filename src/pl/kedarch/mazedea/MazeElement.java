@@ -1,7 +1,7 @@
 package pl.kedarch.mazedea;
 
-class MazeElement {
-     MazeElement() {
-        super();
-    }
+/**
+ * Abstract class used as base for maze elements
+ */
+abstract class MazeElement {
 }

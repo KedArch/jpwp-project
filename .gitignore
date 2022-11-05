@@ -2,6 +2,9 @@
 *.class
 build/
 
+# Docs (they are generated)
+docs/
+
 # Log file
 *.log
 

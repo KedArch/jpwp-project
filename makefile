@@ -26,3 +26,6 @@ disclaimer-docker:
 	@echo "Address is localhost:5900 or 127.0.0.1:5900. Password is 1234."
 	@echo "Press Ctrl+C to kill app."
 	
+build-docs: 
+	rm -rf docs
+	javadoc -d docs -sourcepath src -private pl.kedarch.mazedea
