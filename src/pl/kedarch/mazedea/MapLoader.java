@@ -32,8 +32,8 @@ class MapLoader {
      * @throws Exception if programmer forgot something
      */
     MapLoader() throws Exception {
-        this.resDir = new Mazedea().getClass().getResource("resources/").toString();
-        this.appPath = new File(Mazedea.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getParentFile().getPath();
+        this.resDir = new Main().getClass().getResource("resources/").toString();
+        this.appPath = new File(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getParentFile().getPath();
         URL file = new URL(this.resDir+"maps/list.txt");
         BufferedReader list = new BufferedReader(new InputStreamReader(file.openStream()));
         String line;
@@ -46,32 +46,32 @@ class MapLoader {
     }
 
     /**
-     * Reload external maps
+     * Reload external maps from $appPath$/maps
      * @throws Exception if programmer forgot something
      */
     void reload() throws Exception {
+        String mapPath = appPath + "/maps";
         for (int i = this.mapNames.size(); i > this.defaultMapAmount; i--)
             this.mapNames.remove(i-1);
-        if (!(new File(appPath).exists()) || !(new File(appPath).isDirectory()))
+        if (!(new File(mapPath).exists()) || !(new File(mapPath).isDirectory()))
             return;
-        File files[] = new File(appPath).listFiles();
+        File files[] = new File(mapPath).listFiles();
         File file;
         String fileName;
         for (int i = 0; i < files.length; i++) {
             file = files[i];
             if (file.exists() && file.isFile() && file.getName().endsWith(".map")) {
-                if (this.mapNames.contains(file.getName())) {
-                    System.err.println("'"+file.getName()+"' map name already exists in list");
-                    throw new Exception();
+                fileName = file.getName().substring(0, file.getName().length()-4);
+                if (this.mapNames.contains(fileName)) {
+                    throw new Exception("'"+fileName+"' map name already exists in list");
                 }
-                fileName = file.getName();
-                this.mapNames.add(fileName.substring(0, fileName.length()-4));
+                this.mapNames.add(fileName);
             }
         }
     }
 
     /**
-     * Creates Maze object from name if it exist in mapNames<br>
+     * Creates Map object from name if it exist in mapNames<br>
      * Scheme for creating maps<br>
      * 0,0;0,0<br>
      * 1,1;2,1<br>
@@ -83,18 +83,18 @@ class MapLoader {
      * Type list:<br>
      * 0 - Floor (attribute not used)<br>
      * 1 - Wall (attribute not used)<br>
-     * 2 - Player (attribute not used)<br>
-     * 3 - Exit (attribute not used)<br>
-     * 4 - Gate<br>
-     * 5 - Level<br>
-     * 6 - Door<br>
-     * 7 - Key<br>
+     * 2 - Gate<br>
+     * 3 - Level<br>
+     * 4 - Door<br>
+     * 5 - Key<br>
+     * 6 - Exit (attribute not used; only one)<br>
+     * 7 - Player (attribute not used; only one)<br>
      * @param name map name<br>
-     * @return map (Maze) corresponding to name
-     * @throws Exception if programmer forgot something
+     * @return map (Map) corresponding to name
+     * @throws Exception if map is invalid or programmer forgot something
      */
-    Maze returnMaze(String name) throws Exception {
-        Maze map;
+    Map returnMap(String name) throws Exception {
+        Map map;
         String path;
         if (!this.mapNames.contains(name))
             return null;
@@ -106,23 +106,94 @@ class MapLoader {
         URL file = new URL(path);
         BufferedReader reader = new BufferedReader(new InputStreamReader(file.openStream()));
         String element[];
-        String t[];
+        String tl[];
         String line;
-        map = new Maze();
-        ArrayList<Integer> listTypes = new ArrayList<Integer>();
-        ArrayList<Integer> listAttribs = new ArrayList<Integer>();
+        int index = 0;
+        Integer t;
+        Integer l;
+        MapElement tempElem;
+        map = new Map();
+        ArrayList<ArrayList<MapElement>> elemTypes = map.getElemTypes();
+        ArrayList<MapElement> tempTypes = new ArrayList<MapElement>();
+        ArrayList<MapElement> clonedTypes;
+        Player player = map.getPlayer();
+        Integer playerCoords[] = new Integer[4];
+        Integer forbiddenWithoutComma[] = {2,3,4,5};
         while ((line = reader.readLine()) != null) {
-            listTypes.clear();
-            listAttribs.clear();
+            tempTypes.clear();
             element = line.split(";");
             for (int i = 0; i < element.length; i++) {
-                t = element[i].split(",");
-                listTypes.add(Integer.parseInt(t[0]));
-                listAttribs.add(Integer.parseInt(t[1]));
+                try {
+                    if (element[i].contains(",")) {
+                        tl = element[i].split(",");
+                        t = Integer.parseInt(tl[0]);
+                        l = Integer.parseInt(tl[1]);
+                    } else {
+                        t = Integer.parseInt(element[i]);
+                        l = null;
+                        for(Integer x : forbiddenWithoutComma){
+                            if (t == x) {
+                                throw new Exception("Found linkable object without specified link! Problem in map "+name+": row "+String.valueOf(index+1)+" column "+String.valueOf(i+1));
+                            }
+                        }
+                    }
+                } catch (NumberFormatException e) {
+                    throw new Exception("Invalid element format found! Problem in map "+name+": row "+String.valueOf(index+1)+" column "+String.valueOf(i+1));
+                }
+                switch (t) {
+                    case 0:
+                        tempTypes.add(new Floor());
+                        break;
+                    case 1:
+                        tempTypes.add(new Wall());
+                        break;
+                    case 2:
+                        tempElem = new Gate();
+                        tempElem.setLink(l);
+                        tempTypes.add(tempElem);
+                        break;
+                    case 3:
+                        tempElem = new Level();
+                        tempElem.setLink(l);
+                        tempTypes.add(tempElem);
+                        break;
+                    case 4:
+                        tempElem = new Door();
+                        tempElem.setLink(l);
+                        tempTypes.add(tempElem);
+                        break;
+                    case 5:
+                        tempElem = new Key();
+                        tempElem.setLink(l);
+                        tempTypes.add(tempElem);
+                        break;
+                    case 6:
+                        if (playerCoords[2] != null && playerCoords[3] != null) {
+                            throw new Exception("Exit position already loaded, but got it again! Problem in map "+name+": row "+String.valueOf(index+1)+" column "+String.valueOf(i+1));
+                        }
+                        playerCoords[2] = t;
+                        playerCoords[3] = index;
+                        tempTypes.add(new Exit());
+                        break;
+                    case 7:
+                        if (playerCoords[0] != null && playerCoords[1] != null) {
+                            throw new Exception("Player position already loaded, but got it again! Problem in map "+name+": row "+String.valueOf(index+1)+" column "+String.valueOf(i+1));
+                        }
+                        playerCoords[0] = t;
+                        playerCoords[1] = index;
+                        tempTypes.add(new Floor());
+                        break;
+                    default:
+                        throw new Exception("Type number not in <0,7>. Problem in map "+name+": row "+String.valueOf(index+1)+" column "+String.valueOf(i+1));
+                }
             }
-            map.elemTypes.add((ArrayList<Integer>)listTypes.clone());
-            map.elemAttribs.add((ArrayList<Integer>)listAttribs.clone());
+            clonedTypes = new ArrayList<MapElement>(tempTypes);
+            elemTypes.add(clonedTypes);
+            index++;
         }
+        map.setElemTypes(elemTypes);
+        player.setCoords(playerCoords);
+        map.setPlayer(player);
         return map;
     }
 }
