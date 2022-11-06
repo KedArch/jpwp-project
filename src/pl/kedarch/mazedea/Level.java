@@ -12,14 +12,14 @@ class Level extends Linkable {
     /**
      * @return
      */
-    public boolean isToggled() {
+    boolean isToggled() {
         return toggled;
     }
 
     /**
      * @param toggled
      */
-    public void setToggled(boolean toggled) {
+    void setToggled(boolean toggled) {
         this.toggled = toggled;
     }
 }

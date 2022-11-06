@@ -12,20 +12,20 @@ class MapLoader {
     /**
      * Location of resource directory containing default maps and images
      */
-    String resDir;
+    private String resDir;
     /**
      * Location of root directory of the app
      */
-    String appPath;
+    private String appPath;
     /**
      * Default map number used to reload only external maps
      *
      */
-    int defaultMapAmount;
+    private int defaultMapAmount;
     /**
      * List of names used when selecting maps
      */
-    ArrayList<String> mapNames;
+    private ArrayList<String> mapNames;
 
     /**
      * Loads default and external maps
@@ -195,5 +195,26 @@ class MapLoader {
         player.setCoords(playerCoords);
         map.setPlayer(player);
         return map;
+    }
+
+    /**
+     * @return resDir
+     */
+    String getResDir() {
+        return resDir;
+    }
+
+    /**
+     * @return appPath
+     */
+    String getAppPath() {
+        return appPath;
+    }
+
+    /**
+     * @return mapNames ArrayList
+     */
+    ArrayList<String> getMapNames() {
+        return mapNames;
     }
 }

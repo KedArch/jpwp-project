@@ -7,7 +7,7 @@ class MapController {
     /**
      * Object containing loaded maps
      */
-    MapLoader maps;
+    private MapLoader maps;
 
     /**
      * Create MapLoader object

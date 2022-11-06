@@ -22,28 +22,28 @@ class Map {
     /**
      * @return elemTypes '2D' list of MapElements
      */
-    public ArrayList<ArrayList<MapElement>> getElemTypes() {
+    ArrayList<ArrayList<MapElement>> getElemTypes() {
         return elemTypes;
     }
 
     /**
      * @param elemTypes '2D' list of MapElements
      */
-    public void setElemTypes(ArrayList<ArrayList<MapElement>> elemTypes) {
+    void setElemTypes(ArrayList<ArrayList<MapElement>> elemTypes) {
         this.elemTypes = elemTypes;
     }
 
     /**
      * @return Player class containing data about player and end positions
      */
-    public Player getPlayer() {
+    Player getPlayer() {
         return player;
     }
 
     /**
      * @param player class containing data about player and end positions
      */
-    public void setPlayer(Player player) {
+    void setPlayer(Player player) {
         this.player = player;
     }
 

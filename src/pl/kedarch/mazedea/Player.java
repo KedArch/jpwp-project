@@ -25,14 +25,14 @@ class Player extends MapElement {
     /**
      * @return keys
      */
-    public ArrayList<Key> getKeys() {
+    ArrayList<Key> getKeys() {
         return keys;
     }
 
     /**
      * @param keys
      */
-    public void setKeys(ArrayList<Key> keys) {
+    void setKeys(ArrayList<Key> keys) {
         this.keys = keys;
     }
 
