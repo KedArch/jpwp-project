@@ -115,6 +115,7 @@ class MapLoader {
         map = new Map();
         ArrayList<ArrayList<MapElement>> elemTypes = map.getElemTypes();
         ArrayList<MapElement> tempTypes = new ArrayList<MapElement>();
+        ArrayList<MapElement> clonedTypes;
         Player player = map.getPlayer();
         Integer playerCoords[] = new Integer[4];
         Integer forbiddenWithoutComma[] = {2,3,4,5};
@@ -186,7 +187,8 @@ class MapLoader {
                         throw new Exception("Type number not in <0,7>. Problem in map "+name+": row "+String.valueOf(index+1)+" column "+String.valueOf(i+1));
                 }
             }
-            elemTypes.add((ArrayList<MapElement>)tempTypes.clone());
+            clonedTypes = new ArrayList<MapElement>(tempTypes);
+            elemTypes.add(clonedTypes);
             index++;
         }
         map.setElemTypes(elemTypes);
