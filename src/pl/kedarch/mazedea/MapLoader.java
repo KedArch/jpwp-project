@@ -46,25 +46,26 @@ class MapLoader {
     }
 
     /**
-     * Reload external maps
+     * Reload external maps from $appPath$/maps
      * @throws Exception if programmer forgot something
      */
     void reload() throws Exception {
+        String mapPath = appPath + "/maps";
         for (int i = this.mapNames.size(); i > this.defaultMapAmount; i--)
             this.mapNames.remove(i-1);
-        if (!(new File(appPath).exists()) || !(new File(appPath).isDirectory()))
+        if (!(new File(mapPath).exists()) || !(new File(mapPath).isDirectory()))
             return;
-        File files[] = new File(appPath).listFiles();
+        File files[] = new File(mapPath).listFiles();
         File file;
         String fileName;
         for (int i = 0; i < files.length; i++) {
             file = files[i];
             if (file.exists() && file.isFile() && file.getName().endsWith(".map")) {
-                if (this.mapNames.contains(file.getName())) {
-                    throw new Exception("'"+file.getName()+"' map name already exists in list");
+                fileName = file.getName().substring(0, file.getName().length()-4);
+                if (this.mapNames.contains(fileName)) {
+                    throw new Exception("'"+fileName+"' map name already exists in list");
                 }
-                fileName = file.getName();
-                this.mapNames.add(fileName.substring(0, fileName.length()-4));
+                this.mapNames.add(fileName);
             }
         }
     }
