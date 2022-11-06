@@ -117,7 +117,7 @@ class MapLoader {
         ArrayList<MapElement> tempTypes = new ArrayList<MapElement>();
         Player player = map.getPlayer();
         Integer playerCoords[] = new Integer[4];
-        Integer forbiddenWithoutComma[] = {0,1,6,7};
+        Integer forbiddenWithoutComma[] = {2,3,4,5};
         while ((line = reader.readLine()) != null) {
             tempTypes.clear();
             element = line.split(";");
