@@ -194,6 +194,7 @@ class MapLoader {
         map.setElemTypes(elemTypes);
         player.setCoords(playerCoords);
         map.setPlayer(player);
+        map.setName(name);
         return map;
     }
 

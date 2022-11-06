@@ -9,7 +9,14 @@ class Map {
      * Array of elements on Map
      */
     private ArrayList<ArrayList<MapElement>> elemTypes;
+    /**
+     * Player class containing his and exit coordinates
+     */
     private Player player;
+    /**
+     * Map name
+     */
+    private String name;
 
     /**
      * Initializes ArrayLists
@@ -46,5 +53,20 @@ class Map {
     void setPlayer(Player player) {
         this.player = player;
     }
+
+    /**
+     * @return name
+     */
+    String getName() {
+        return name;
+    }
+
+    /**
+     * @param name
+     */
+    void setName(String name) {
+        this.name = name;
+    }
+
 
 }
