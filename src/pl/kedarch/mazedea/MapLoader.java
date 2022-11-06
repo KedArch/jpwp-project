@@ -61,8 +61,7 @@ class MapLoader {
             file = files[i];
             if (file.exists() && file.isFile() && file.getName().endsWith(".map")) {
                 if (this.mapNames.contains(file.getName())) {
-                    System.err.println("'"+file.getName()+"' map name already exists in list");
-                    throw new Exception();
+                    throw new Exception("'"+file.getName()+"' map name already exists in list");
                 }
                 fileName = file.getName();
                 this.mapNames.add(fileName.substring(0, fileName.length()-4));
@@ -122,19 +121,22 @@ class MapLoader {
             tempTypes.clear();
             element = line.split(";");
             for (int i = 0; i < element.length; i++) {
-                if (element[i].contains(",")) {
-                    tl = element[i].split(",");
-                    t = Integer.parseInt(tl[0]);
-                    l = Integer.parseInt(tl[1]);
-                } else {
-                    t = Integer.parseInt(element[i]);
-                    l = null;
-                    for(Integer x : forbiddenWithoutComma){
-                        if (t == x) {
-                            System.err.println("Found linkable object without specified link!");
-                            throw new Exception();
+                try {
+                    if (element[i].contains(",")) {
+                        tl = element[i].split(",");
+                        t = Integer.parseInt(tl[0]);
+                        l = Integer.parseInt(tl[1]);
+                    } else {
+                        t = Integer.parseInt(element[i]);
+                        l = null;
+                        for(Integer x : forbiddenWithoutComma){
+                            if (t == x) {
+                                throw new Exception("Found linkable object without specified link! Problem in map "+name+": row "+String.valueOf(index+1)+" column "+String.valueOf(i+1));
+                            }
                         }
                     }
+                } catch (NumberFormatException e) {
+                    throw new Exception("Invalid element format found! Problem in map "+name+": row "+String.valueOf(index+1)+" column "+String.valueOf(i+1));
                 }
                 switch (t) {
                     case 0:
@@ -165,8 +167,7 @@ class MapLoader {
                         break;
                     case 6:
                         if (playerCoords[2] != null && playerCoords[3] != null) {
-                            System.err.println("Exit position already loaded, but got it again!");
-                            throw new Exception();
+                            throw new Exception("Exit position already loaded, but got it again! Problem in map "+name+": row "+String.valueOf(index+1)+" column "+String.valueOf(i+1));
                         }
                         playerCoords[2] = t;
                         playerCoords[3] = index;
@@ -174,13 +175,14 @@ class MapLoader {
                         break;
                     case 7:
                         if (playerCoords[0] != null && playerCoords[1] != null) {
-                            System.err.println("Player position already loaded, but got it again!");
-                            throw new Exception();
+                            throw new Exception("Player position already loaded, but got it again! Problem in map "+name+": row "+String.valueOf(index+1)+" column "+String.valueOf(i+1));
                         }
                         playerCoords[0] = t;
                         playerCoords[1] = index;
                         tempTypes.add(new Floor());
                         break;
+                    default:
+                        throw new Exception("Type number not in <0,7>. Problem in map "+name+": row "+String.valueOf(index+1)+" column "+String.valueOf(i+1));
                 }
             }
             elemTypes.add((ArrayList<MapElement>)tempTypes.clone());
