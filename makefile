@@ -1,7 +1,7 @@
 build-jar: build
 	jar cvfm Mazedea.jar Manifest.txt -C build .
 build: clear
-	javac -sourcepath src -d build src/pl/kedarch/mazedea/Mazedea.java
+	javac -sourcepath src -d build src/pl/kedarch/mazedea/Main.java
 	cp -r resources/ build/pl/kedarch/mazedea/
 build-docker: build-jar
 	docker image rm -f pl.kedarch.mazedea
@@ -10,7 +10,7 @@ run-docker: disclaimer-docker
 	@docker run -ti --rm --net=host pl.kedarch.mazedea > /dev/null
 run: build
 	@echo Running build
-	java -cp build pl.kedarch.mazedea.Mazedea
+	java -cp build pl.kedarch.mazedea.Main
 run-jar: build-jar
 	@echo Running jar build
 	java -jar Mazedea.jar

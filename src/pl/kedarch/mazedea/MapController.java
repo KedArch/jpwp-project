@@ -1,9 +1,9 @@
 package pl.kedarch.mazedea;
 
 /**
- * Class controlling maze functionality
+ * Class controlling map functionality
  */
-class MazeController {
+class MapController {
     /**
      * Object containing loaded maps
      */
@@ -13,12 +13,12 @@ class MazeController {
      * Create MapLoader object
      * @throws Exception if programmer forgot something
      */
-    MazeController() throws Exception {
+    MapController() throws Exception {
         this.maps = new MapLoader();
     }
 
     /**
-     * Start maze functionality
+     * Start map functionality
      */
     void start() {
     }

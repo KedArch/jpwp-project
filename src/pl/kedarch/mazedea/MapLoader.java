@@ -32,8 +32,8 @@ class MapLoader {
      * @throws Exception if programmer forgot something
      */
     MapLoader() throws Exception {
-        this.resDir = new Mazedea().getClass().getResource("resources/").toString();
-        this.appPath = new File(Mazedea.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getParentFile().getPath();
+        this.resDir = new Main().getClass().getResource("resources/").toString();
+        this.appPath = new File(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getParentFile().getPath();
         URL file = new URL(this.resDir+"maps/list.txt");
         BufferedReader list = new BufferedReader(new InputStreamReader(file.openStream()));
         String line;
@@ -71,7 +71,7 @@ class MapLoader {
     }
 
     /**
-     * Creates Maze object from name if it exist in mapNames<br>
+     * Creates Map object from name if it exist in mapNames<br>
      * Scheme for creating maps<br>
      * 0,0;0,0<br>
      * 1,1;2,1<br>
@@ -83,18 +83,18 @@ class MapLoader {
      * Type list:<br>
      * 0 - Floor (attribute not used)<br>
      * 1 - Wall (attribute not used)<br>
-     * 2 - Player (attribute not used)<br>
-     * 3 - Exit (attribute not used)<br>
-     * 4 - Gate<br>
-     * 5 - Level<br>
-     * 6 - Door<br>
-     * 7 - Key<br>
+     * 2 - Gate<br>
+     * 3 - Level<br>
+     * 4 - Door<br>
+     * 5 - Key<br>
+     * 6 - Exit (attribute not used; only one)<br>
+     * 7 - Player (attribute not used; only one)<br>
      * @param name map name<br>
-     * @return map (Maze) corresponding to name
-     * @throws Exception if programmer forgot something
+     * @return map (Map) corresponding to name
+     * @throws Exception if map is invalid or programmer forgot something
      */
-    Maze returnMaze(String name) throws Exception {
-        Maze map;
+    Map returnMap(String name) throws Exception {
+        Map map;
         String path;
         if (!this.mapNames.contains(name))
             return null;
@@ -106,23 +106,77 @@ class MapLoader {
         URL file = new URL(path);
         BufferedReader reader = new BufferedReader(new InputStreamReader(file.openStream()));
         String element[];
-        String t[];
+        String tl[];
         String line;
-        map = new Maze();
-        ArrayList<Integer> listTypes = new ArrayList<Integer>();
-        ArrayList<Integer> listAttribs = new ArrayList<Integer>();
+        int index = 0;
+        int t;
+        int l;
+        MapElement elem;
+        map = new Map();
+        ArrayList<ArrayList<MapElement>> elemTypes = map.getElemTypes();
+        ArrayList<MapElement> tempTypes = new ArrayList<MapElement>();
+        Player player = map.getPlayer();
+        Integer playerCoords[] = new Integer[4];
         while ((line = reader.readLine()) != null) {
-            listTypes.clear();
-            listAttribs.clear();
+            tempTypes.clear();
             element = line.split(";");
             for (int i = 0; i < element.length; i++) {
-                t = element[i].split(",");
-                listTypes.add(Integer.parseInt(t[0]));
-                listAttribs.add(Integer.parseInt(t[1]));
+                tl = element[i].split(",");
+                t = Integer.parseInt(ta[0]);
+                l = Integer.parseInt(ta[1]);
+                switch (t) {
+                    case 0:
+                        tempTypes.add(new Floor());
+                        break;
+                    case 1:
+                        tempTypes.add(new Wall());
+                        break;
+                    case 2:
+                        elem = new Gate();
+                        elem.setLink(l);
+                        tempTypes.add(elem);
+                        break;
+                    case 3:
+                        elem = new Level();
+                        elem.setLink(l);
+                        tempTypes.add(elem);
+                        break;
+                    case 4:
+                        elem = new Door();
+                        elem.setLink(l);
+                        tempTypes.add(elem);
+                        break;
+                    case 5:
+                        elem = new Key();
+                        elem.setLink(l);
+                        tempTypes.add(elem);
+                        break;
+                    case 6:
+                        if (playerCoords[2] != null && playerCoords[3] != null) {
+                            System.err.println("Exit position already loaded, but got it again!");
+                            throw Exception;
+                        }
+                        playerCoords[2] = t;
+                        playerCoords[3] = index;
+                        tempTypes.add(new Exit());
+                        break;
+                    case 7:
+                        if (playerCoords[0] != null && playerCoords[1] != null) {
+                            System.err.println("Player position already loaded, but got it again!");
+                            throw Exception;
+                        }
+                        playerCoords[0] = t;
+                        playerCoords[1] = index;
+                        tempTypes.add(new Floor());
+                        break;
+                }
             }
-            map.elemTypes.add((ArrayList<Integer>)listTypes.clone());
-            map.elemAttribs.add((ArrayList<Integer>)listAttribs.clone());
+            elemTypes.add(tempTypes.clone());
+            index++;
         }
+        map.setElemTypes(elemTypes);
+        player.setCoords(playerCoords);
+        map.setPlayer(player);
         return map;
     }
 }
