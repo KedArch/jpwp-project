@@ -109,21 +109,33 @@ class MapLoader {
         String tl[];
         String line;
         int index = 0;
-        int t;
-        int l;
-        MapElement elem;
+        Integer t;
+        Integer l;
+        MapElement tempElem;
         map = new Map();
         ArrayList<ArrayList<MapElement>> elemTypes = map.getElemTypes();
         ArrayList<MapElement> tempTypes = new ArrayList<MapElement>();
         Player player = map.getPlayer();
         Integer playerCoords[] = new Integer[4];
+        Integer forbiddenWithoutComma[] = {0,1,6,7};
         while ((line = reader.readLine()) != null) {
             tempTypes.clear();
             element = line.split(";");
             for (int i = 0; i < element.length; i++) {
-                tl = element[i].split(",");
-                t = Integer.parseInt(ta[0]);
-                l = Integer.parseInt(ta[1]);
+                if (element[i].contains(",")) {
+                    tl = element[i].split(",");
+                    t = Integer.parseInt(tl[0]);
+                    l = Integer.parseInt(tl[1]);
+                } else {
+                    t = Integer.parseInt(element[i]);
+                    l = null;
+                    for(Integer x : forbiddenWithoutComma){
+                        if (t == x) {
+                            System.err.println("Found linkable object without specified link!");
+                            throw new Exception();
+                        }
+                    }
+                }
                 switch (t) {
                     case 0:
                         tempTypes.add(new Floor());
@@ -132,29 +144,29 @@ class MapLoader {
                         tempTypes.add(new Wall());
                         break;
                     case 2:
-                        elem = new Gate();
-                        elem.setLink(l);
-                        tempTypes.add(elem);
+                        tempElem = new Gate();
+                        tempElem.setLink(l);
+                        tempTypes.add(tempElem);
                         break;
                     case 3:
-                        elem = new Level();
-                        elem.setLink(l);
-                        tempTypes.add(elem);
+                        tempElem = new Level();
+                        tempElem.setLink(l);
+                        tempTypes.add(tempElem);
                         break;
                     case 4:
-                        elem = new Door();
-                        elem.setLink(l);
-                        tempTypes.add(elem);
+                        tempElem = new Door();
+                        tempElem.setLink(l);
+                        tempTypes.add(tempElem);
                         break;
                     case 5:
-                        elem = new Key();
-                        elem.setLink(l);
-                        tempTypes.add(elem);
+                        tempElem = new Key();
+                        tempElem.setLink(l);
+                        tempTypes.add(tempElem);
                         break;
                     case 6:
                         if (playerCoords[2] != null && playerCoords[3] != null) {
                             System.err.println("Exit position already loaded, but got it again!");
-                            throw Exception;
+                            throw new Exception();
                         }
                         playerCoords[2] = t;
                         playerCoords[3] = index;
@@ -163,7 +175,7 @@ class MapLoader {
                     case 7:
                         if (playerCoords[0] != null && playerCoords[1] != null) {
                             System.err.println("Player position already loaded, but got it again!");
-                            throw Exception;
+                            throw new Exception();
                         }
                         playerCoords[0] = t;
                         playerCoords[1] = index;
@@ -171,7 +183,7 @@ class MapLoader {
                         break;
                 }
             }
-            elemTypes.add(tempTypes.clone());
+            elemTypes.add((ArrayList<MapElement>)tempTypes.clone());
             index++;
         }
         map.setElemTypes(elemTypes);

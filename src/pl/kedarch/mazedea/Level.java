@@ -3,7 +3,7 @@ package pl.kedarch.mazedea;
 /**
  * Element toggling gates with the same link
  */
-class Level {
+class Level extends Linkable {
     /**
      * Variable storing info about class state
      */

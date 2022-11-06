@@ -9,7 +9,7 @@ class Player extends MapElement {
      * An array containing coordinates of player and exit<br>
      * Arguments are playerX, playerY, endX, endY in that sequence
      */
-    private int[] coords;
+    private Integer[] coords;
     /**
      * An array containing keys obtained by player
      */
@@ -19,7 +19,7 @@ class Player extends MapElement {
      * Initializes coords array
      */
     Player() {
-        this.coords = new int[4];
+        this.coords = new Integer[4];
     }
 
     /**
@@ -39,14 +39,14 @@ class Player extends MapElement {
     /**
      * @return coords
      */
-    int[] getCoords() {
+    Integer[] getCoords() {
         return coords;
     }
 
     /**
      * @param coords
      */
-    void setCoords(int[] coords) {
+    void setCoords(Integer[] coords) {
         this.coords = coords;
     }
 }
