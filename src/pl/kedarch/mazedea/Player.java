@@ -19,7 +19,7 @@ class Player extends MapElement {
      * Initializes coords array
      */
     Player() {
-        this.coords = new Integer[4];
+        this.coords = new Integer[2];
     }
 
     /**

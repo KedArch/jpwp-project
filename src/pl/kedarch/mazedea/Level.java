@@ -17,9 +17,12 @@ class Level extends Linkable {
     }
 
     /**
-     * @param toggled
+     * Toggle state
      */
-    void setToggled(boolean toggled) {
-        this.toggled = toggled;
+    void toggle() {
+        if (this.toggled)
+            this.toggled = false;
+        else
+            this.toggled = true;
     }
 }

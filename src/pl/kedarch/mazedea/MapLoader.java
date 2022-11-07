@@ -117,7 +117,8 @@ class MapLoader {
         ArrayList<MapElement> tempTypes = new ArrayList<MapElement>();
         ArrayList<MapElement> clonedTypes;
         Player player = map.getPlayer();
-        Integer playerCoords[] = new Integer[4];
+        Integer playerCoords[] = new Integer[2];
+        Integer exitCoords[] = new Integer[2];
         Integer forbiddenWithoutComma[] = {2,3,4,5};
         while ((line = reader.readLine()) != null) {
             tempTypes.clear();
@@ -133,12 +134,12 @@ class MapLoader {
                         l = null;
                         for(Integer x : forbiddenWithoutComma){
                             if (t == x) {
-                                throw new Exception("Found linkable object without specified link! Problem in map "+name+": row "+String.valueOf(index+1)+" column "+String.valueOf(i+1));
+                                throw new MapException("Found linkable object without specified link! Problem in map "+name+": row "+String.valueOf(index+1)+" column "+String.valueOf(i+1));
                             }
                         }
                     }
                 } catch (NumberFormatException e) {
-                    throw new Exception("Invalid element format found! Problem in map "+name+": row "+String.valueOf(index+1)+" column "+String.valueOf(i+1));
+                    throw new MapException("Invalid element format found! Problem in map "+name+": row "+String.valueOf(index+1)+" column "+String.valueOf(i+1));
                 }
                 switch (t) {
                     case 0:
@@ -168,28 +169,33 @@ class MapLoader {
                         tempTypes.add(tempElem);
                         break;
                     case 6:
-                        if (playerCoords[2] != null && playerCoords[3] != null) {
-                            throw new Exception("Exit position already loaded, but got it again! Problem in map "+name+": row "+String.valueOf(index+1)+" column "+String.valueOf(i+1));
+                        if (exitCoords[0] != null && exitCoords[1] != null) {
+                            throw new MapException("Exit position already loaded, but got it again! Problem in map "+name+": row "+String.valueOf(index+1)+" column "+String.valueOf(i+1));
                         }
-                        playerCoords[2] = t;
-                        playerCoords[3] = index;
+                        exitCoords[0] = t;
+                        exitCoords[1] = index;
                         tempTypes.add(new Exit());
                         break;
                     case 7:
                         if (playerCoords[0] != null && playerCoords[1] != null) {
-                            throw new Exception("Player position already loaded, but got it again! Problem in map "+name+": row "+String.valueOf(index+1)+" column "+String.valueOf(i+1));
+                            throw new MapException("Player position already loaded, but got it again! Problem in map "+name+": row "+String.valueOf(index+1)+" column "+String.valueOf(i+1));
                         }
                         playerCoords[0] = t;
                         playerCoords[1] = index;
                         tempTypes.add(new Floor());
                         break;
                     default:
-                        throw new Exception("Type number not in <0,7>. Problem in map "+name+": row "+String.valueOf(index+1)+" column "+String.valueOf(i+1));
+                        throw new MapException("Type number not in <0,7>. Problem in map "+name+": row "+String.valueOf(index+1)+" column "+String.valueOf(i+1));
                 }
             }
             clonedTypes = new ArrayList<MapElement>(tempTypes);
             elemTypes.add(clonedTypes);
             index++;
+        }
+        for (int i = 0; i < playerCoords.length; i++) {
+            if (playerCoords[i] == null) {
+                throw new MapException("Map "+name+" does not have Player or Exit!");
+            }
         }
         map.setElemTypes(elemTypes);
         player.setCoords(playerCoords);

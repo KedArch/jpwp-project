@@ -9,15 +9,18 @@ abstract class Openable extends Linkable {
      */
     private boolean opened = false;
     /**
-     * @param opened
+     * Toggle state
      */
-    final void setOpened(boolean opened) {
-        this.opened = opened;
+    final void toggle() {
+        if (this.opened)
+            this.opened = false;
+        else
+            this.opened = true;
     };
     /**
      * @return opened
      */
-    final boolean getOpened() {
+    final boolean isOpened() {
         return this.opened;
     };
 }

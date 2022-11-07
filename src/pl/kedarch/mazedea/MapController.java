@@ -1,5 +1,6 @@
 package pl.kedarch.mazedea;
 
+import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -30,8 +31,9 @@ class MapController {
 
     /**
      * Start map functionality
+     * @throws Exception if map is invalid or programmer forgot something
      */
-    void start(final String[] args) {
+    void start(final String[] args) throws Exception {
         for (int i = 0; i < args.length; i++) {
             System.out.println(args[i]);
         }
@@ -62,6 +64,7 @@ class MapController {
     /**
      * Return new Map object from name
      * @return map
+     * @throws MapException if map file is invalid
      * @throws Exception if map is invalid or programmer forgot something
      */
     Map returnMap(String name) throws Exception {
@@ -86,22 +89,22 @@ class MapController {
 
     /**
      * Starts CLI version
+     * @throws Exception if map is invalid or programmer forgot something
      */
-    void startCLI() {
+    void startCLI() throws Exception {
         Scanner scanner = new Scanner(System.in);
         String in;
         String handleOut;
-        String info = "Available options: wsad - move up,down,left,right; r - restart; l - load map; m - reload external maps; q - quit";
         try {
-            System.out.println(info);
+            this.printCLI();
             while ((in = scanner.nextLine()) != null) {
                 handleOut = this.handleInput(in, false);
                 if (handleOut == null) {
                     System.out.println("Bye!");
-                    return;
+                    break;
                 } else if (handleOut != "")
                     System.out.println(handleOut);
-                System.out.println(info);
+                this.printCLI();
             }
         } catch (NoSuchElementException e) {
             scanner.close();
@@ -112,68 +115,107 @@ class MapController {
     }
 
     /**
-     * Starts GUI version
+     * Prints CLI prompt string
      */
-    void startGUI() {
+    void printCLI() {
+        String info = "";
+        if (this.getMap() != null) 
+            info += "Map name: "+this.getMap().getName()+"\n";
+        info += "Available options: ";
+        if (this.getMap() != null) 
+            info += "wsad - move up,down,left,right; r - restart; ";
+        info += "l - list available maps; m - load map; e - reload external maps; q - quit\n> ";
+        System.out.print(info);
+    }
+
+    /**
+     * Starts GUI version
+     * @throws Exception if map is invalid or programmer forgot something
+     */
+    void startGUI() throws Exception {
 
     }
 
-    String handleInput(String in, boolean isGUI) {
+    /**
+     * Handles available input
+     * @param in input string
+     * @param isGUI
+     * @return message
+     * @throws Exception if map is invalid or programmer forgot something
+     */
+    String handleInput(String in, boolean isGUI) throws Exception {
         String arg;
         String split[];
         Map map;
-        if (in.startsWith("l ")) {
+        if (this.getMap() != null && !this.victory) {
+            if (in.equals("w")) {
+                if (!this.moveLogic("w"))
+                    return "Invalid move";
+                return "";
+            } else if (in.equals("s")) {
+                if (!this.moveLogic("s"))
+                    return "Invalid move";
+                return "";
+            } else if (in.equals("a")) {
+                if (!this.moveLogic("a"))
+                    return "Invalid move";
+                return "";
+            } else if (in.equals("d")) {
+                if (!this.moveLogic("d"))
+                    return "Invalid move";
+                return "";
+            }
+        } else if (in.equals("r") && this.getMap() != null) {
+            try {
+                map = this.getMap();
+                this.setMap(this.returnMap(map.getName()));
+                return "Map reloaded";
+            } catch (MapException e) {
+                return e.toString();
+            }
+        } else if (in.equals("l")) {
+            String mapList = "Map list:\n";
+            for (String mapName : this.maps.getMapNames()) {
+                mapList += mapName + "\n";
+            }
+            return mapList.substring(0, mapList.length()-1);
+        } else if (in.startsWith("m ")) {
             split = in.split(" ");
             arg = split[1];
-            map = this.returnMap(arg);
+            try {
+                map = this.returnMap(arg);
+            } catch (MapException e) {
+                return e.toString();
+            }
             if (map != null) {
                 this.setMap(map);
                 return "New map set";
             }
             return "Invalid map name";
+        } else if (in.equals("e")) {
+            this.reloadMaps();
+            return "External maps reloaded";
+        } else if (in.equals("q")) {
+            return null;
         }
-        for (String key : in.split("")) {
-            switch (key) {
-                case "w":
-                    if (!this.moveLogic("w"))
-                        return "Invalid move";
-                    return "";
-                    break;
-                case "s":
-                    if (!this.moveLogic("s"))
-                        return "Invalid move";
-                    return "";
-                    break;
-                case "a":
-                    if (!this.moveLogic("a"))
-                        return "Invalid move";
-                    return "";
-                    break;
-                case "d":
-                    if (!this.moveLogic("d"))
-                        return "Invalid move";
-                    return "";
-                    break;
-                case "r":
-                    map = this.getMap();
-                    this.setMap(this.returnMap(map.getName()));
-                    return "Map reloaded";
-                    break;
-                case "m":
-                    this.reloadMaps();
-                    return "External maps reloaded";
-                    break;
-                case "q":
-                    scanner.close();
-                    return null;
-                default:
-                    return "Unknown option";
-            }
-        }
+        return "Unknown option";
     }
 
-    boolean moveLogic(String direction) {
+    /**
+     * Check if move is possible
+     * @param direction
+     * @return success
+     * @throws Exception if map is invalid or programmer forgot something
+     */
+    boolean moveLogic(String direction) throws Exception {
         Map map = this.getMap();
+        // variables below are for setting explicitly
+        ArrayList<ArrayList<MapElement>> elements = map.getElemTypes();
+        ArrayList<MapElement> elementsLine;
+        ArrayList<MapElement> toggledElementLine;
+        ArrayList<Key> keys;
+        MapElement element;
+        MapElement toggledElement;
         Player player = map.getPlayer();
         Integer coords[] = player.getCoords();
         Integer move[] = new Integer[2];
@@ -197,6 +239,50 @@ class MapController {
             default:
                 return false;
         }
+        elementsLine = elements.get(coords[1]+move[1]);
+        element = elementsLine.get(coords[0]+move[0]);
+        if (new Floor().getClass().isInstance(element)) {
+            coords[0] += move[0];
+            coords[1] += move[1];
+        } else if (new Wall().getClass().isInstance(element)) {
+            return false;
+        } else if (new Exit().getClass().isInstance(element)) {
+            map.victory = true;
+            this.setMap(map);
+        } else if (new Gate().getClass().isInstance(element) || new Door().getClass().isInstance(element)) {
+            if (elements.get(coords[1].get(coords[0]).isOpened())) {
+                coords[0] += move[0];
+                coords[1] += move[1];
+            } else {
+                return false;
+            }
+        } else if (new Level().getClass().isInstance(element)) {
+            coords[0] += move[0];
+            coords[1] += move[1];
+            element.toggle();
+            for (int i = 0; i < elements.size(); i++) {
+                for (int j = 0; j < elementsLine.size(); j++) {
+                    toggledElementLine = elements.get(i);
+                    toggledElement = toggledElementLine.get(j);
+                    if (new Gate().getClass().isInstance(toggledElement)) {
+                        toggledElement.toggle();
+                    }
+                    toggledElementLine.set(j, toggledElement);
+                    elements.set(i, toggledElementLine);
+                }
+            }
+        } else if (new Key().getClass().isInstance(element)) {
+            coords[0] += move[0];
+            coords[1] += move[1];
+            keys.add(element);
+            element = new Floor();
+        }
+        elementsLine.set(coords[0], element);
+        elements.set(coords[1], elementsLine);
+        player.setCoords(coords);
+        map.setElemTypes(elements);
+        map.setPlayer(player);
+        this.setMap(map);
         return true;
     }
 }
