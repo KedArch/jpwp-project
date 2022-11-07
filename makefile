@@ -14,6 +14,13 @@ run: build
 run-jar: build-jar
 	@echo Running jar build
 	java -jar Mazedea.jar
+run-cli: build
+	@echo Running build
+	java -cp build pl.kedarch.mazedea.Main -t
+run-jar-cli: build-jar
+	@echo Running jar build
+	java -jar Mazedea.jar -t
+
 run-docker-new: build-docker disclaimer-docker
 	@docker run -ti --rm --net=host pl.kedarch.mazedea > /dev/null
 clear:

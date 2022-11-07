@@ -34,22 +34,18 @@ class MapController {
      * @throws Exception if map is invalid or programmer forgot something
      */
     void start(final String[] args) throws Exception {
-        for (int i = 0; i < args.length; i++) {
-            System.out.println(args[i]);
-        }
-        if (args.length > 1) {
-            if (args[0] == "-h") {
+        if (args.length > 0) {
+            if (args[0].equals("-h")) {
                 System.out.println("Program checks only first argument\nAvailable arguments\n-h prints this message\n-t start in command line mode\n-g start in GUI mode (default)");
-            } else if (args[0] == "-t") {
-                System.out.println("CLI");
+            } else if (args[0].equals("-t")) {
                 this.startCLI();
-            } else if (args[0] == "-g") {
+            } else if (args[0].equals("-g")) {
                 this.startGUI();
             } else {
                 System.err.println("Unknown argument");
             }
         } else {
-            this.startCLI();
+            this.startGUI();
         }
     }
 
@@ -213,10 +209,10 @@ class MapController {
         ArrayList<ArrayList<MapElement>> elements = map.getElemTypes();
         ArrayList<MapElement> elementsLine;
         ArrayList<MapElement> toggledElementLine;
-        ArrayList<Key> keys;
         MapElement element;
         MapElement toggledElement;
         Player player = map.getPlayer();
+        ArrayList<MapElement> keys = player.getKeys();
         Integer coords[] = player.getCoords();
         Integer move[] = new Integer[2];
         switch (direction) {
@@ -247,10 +243,10 @@ class MapController {
         } else if (new Wall().getClass().isInstance(element)) {
             return false;
         } else if (new Exit().getClass().isInstance(element)) {
-            map.victory = true;
+            this.victory = true;
             this.setMap(map);
         } else if (new Gate().getClass().isInstance(element) || new Door().getClass().isInstance(element)) {
-            if (elements.get(coords[1].get(coords[0]).isOpened())) {
+            if (elements.get(coords[1]).get(coords[0]).isOpened()) {
                 coords[0] += move[0];
                 coords[1] += move[1];
             } else {

@@ -13,26 +13,27 @@ class Player extends MapElement {
     /**
      * An array containing keys obtained by player
      */
-    private ArrayList<Key> keys;
+    private ArrayList<MapElement> keys;
 
     /**
      * Initializes coords array
      */
     Player() {
         this.coords = new Integer[2];
+        this.keys = new ArrayList<MapElement>();
     }
 
     /**
      * @return keys
      */
-    ArrayList<Key> getKeys() {
+    ArrayList<MapElement> getKeys() {
         return keys;
     }
 
     /**
      * @param keys
      */
-    void setKeys(ArrayList<Key> keys) {
+    void setKeys(ArrayList<MapElement> keys) {
         this.keys = keys;
     }
 

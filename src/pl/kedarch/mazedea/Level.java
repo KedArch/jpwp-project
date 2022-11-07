@@ -10,7 +10,7 @@ class Level extends Linkable {
     private boolean toggled;
 
     /**
-     * @return
+     * @return toggled
      */
     boolean isToggled() {
         return toggled;
