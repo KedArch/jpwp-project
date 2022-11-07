@@ -11,6 +11,6 @@ public class Main {
      */
     public static void main(final String[] args) throws Exception {
         MapController control = new MapController();
-        control.start();
+        control.start(args);
     }
 }

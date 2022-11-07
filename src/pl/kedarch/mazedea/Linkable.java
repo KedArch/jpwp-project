@@ -9,14 +9,16 @@ abstract class Linkable extends MapElement {
      */
     private int link;
     /**
-     * @param link
+     * @param link number that links elements
      */
+    @Override
     final void setLink(int link) {
         this.link = link;
     };
     /**
-     * @return link
+     * @return link number that links elements
      */
+    @Override
     final int getLink() {
         return this.link;
     };

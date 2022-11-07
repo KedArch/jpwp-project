@@ -9,7 +9,14 @@ class Map {
      * Array of elements on Map
      */
     private ArrayList<ArrayList<MapElement>> elemTypes;
+    /**
+     * Player class containing his and exit coordinates
+     */
     private Player player;
+    /**
+     * Map name
+     */
+    private String name;
 
     /**
      * Initializes ArrayLists
@@ -22,29 +29,44 @@ class Map {
     /**
      * @return elemTypes '2D' list of MapElements
      */
-    public ArrayList<ArrayList<MapElement>> getElemTypes() {
+    ArrayList<ArrayList<MapElement>> getElemTypes() {
         return elemTypes;
     }
 
     /**
      * @param elemTypes '2D' list of MapElements
      */
-    public void setElemTypes(ArrayList<ArrayList<MapElement>> elemTypes) {
+    void setElemTypes(ArrayList<ArrayList<MapElement>> elemTypes) {
         this.elemTypes = elemTypes;
     }
 
     /**
      * @return Player class containing data about player and end positions
      */
-    public Player getPlayer() {
+    Player getPlayer() {
         return player;
     }
 
     /**
      * @param player class containing data about player and end positions
      */
-    public void setPlayer(Player player) {
+    void setPlayer(Player player) {
         this.player = player;
     }
+
+    /**
+     * @return name string
+     */
+    String getName() {
+        return name;
+    }
+
+    /**
+     * @param name string
+     */
+    void setName(String name) {
+        this.name = name;
+    }
+
 
 }
