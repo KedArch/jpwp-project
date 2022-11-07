@@ -5,32 +5,31 @@ package pl.kedarch.mazedea;
  */
 abstract class MapElement {
     /**
+     * Returns element representation in terminal (CLI)
+     * @return termRepresentation
+     */
+    abstract String getTermRepresentation();
+    /**
      * Default empty function
-     * @param link
-     * @see pl.kedarch.mazedea.Linkable.setLink
+     * @param link number that links elements
+     * @see pl.kedarch.mazedea.Linkable#setLink
      */
     void setLink(int link) {};
     /**
      * Default empty function
      * @return 0
-     * @see pl.kedarch.mazedea.Linkable.getLink
+     * @see pl.kedarch.mazedea.Linkable#getLink
      */
     int getLink() {return 0;};
     /**
      * Default empty function
+     * @see pl.kedarch.mazedea.Toggable#toggle
      */
     void toggle() {};
     /**
      * Default empty function
      * @return false
-     * @see pl.kedarch.mazedea.Openable.toggle
-     * @see pl.kedarch.mazedea.Level.toggle
-     */
-    boolean isOpened() {return false;};
-    /**
-     * Default empty function
-     * @return false
-     * @see pl.kedarch.mazedea.Openable.isOpened
+     * @see pl.kedarch.mazedea.Toggable#isToggled
      */
     boolean isToggled() {return false;};
 }

@@ -3,26 +3,12 @@ package pl.kedarch.mazedea;
 /**
  * Element toggling gates with the same link
  */
-class Level extends Linkable {
-    /**
-     * Variable storing info about class state
+class Level extends Toggable {
+    /*
+     * @see pl.kedarch.mazedea.MapElement#getTermRepresentation()
      */
-    private boolean toggled;
-
-    /**
-     * @return toggled
-     */
-    boolean isToggled() {
-        return toggled;
-    }
-
-    /**
-     * Toggle state
-     */
-    void toggle() {
-        if (this.toggled)
-            this.toggled = false;
-        else
-            this.toggled = true;
+    @Override
+    String getTermRepresentation() {
+        return "L";
     }
 }

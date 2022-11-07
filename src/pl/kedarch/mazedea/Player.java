@@ -5,9 +5,16 @@ import java.util.ArrayList;
  * Class holding important info about player
  */
 class Player extends MapElement {
+    /*
+     * @see pl.kedarch.mazedea.MapElement#getTermRepresentation()
+     */
+    @Override
+    String getTermRepresentation() {
+        return "P";
+    }
     /**
-     * An array containing coordinates of player and exit<br>
-     * Arguments are playerX, playerY, endX, endY in that sequence
+     * An array containing coordinates of player<br>
+     * Arguments are playerX, playerY, in that sequence
      */
     private Integer[] coords;
     /**
@@ -16,7 +23,7 @@ class Player extends MapElement {
     private ArrayList<MapElement> keys;
 
     /**
-     * Initializes coords array
+     * Initializes variables
      */
     Player() {
         this.coords = new Integer[2];
@@ -24,28 +31,28 @@ class Player extends MapElement {
     }
 
     /**
-     * @return keys
+     * @return keys ArrayList of owned keys
      */
     ArrayList<MapElement> getKeys() {
         return keys;
     }
 
     /**
-     * @param keys
+     * @param keys ArrayList of owned keys
      */
     void setKeys(ArrayList<MapElement> keys) {
         this.keys = keys;
     }
 
     /**
-     * @return coords
+     * @return coords ArrayList of player coordinates
      */
     Integer[] getCoords() {
         return coords;
     }
 
     /**
-     * @param coords
+     * @param coords ArrayList of player coordinates
      */
     void setCoords(Integer[] coords) {
         this.coords = coords;

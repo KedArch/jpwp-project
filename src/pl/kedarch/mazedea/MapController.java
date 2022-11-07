@@ -31,12 +31,13 @@ class MapController {
 
     /**
      * Start map functionality
+     * @param args arguments from command line
      * @throws Exception if map is invalid or programmer forgot something
      */
     void start(final String[] args) throws Exception {
         if (args.length > 0) {
             if (args[0].equals("-h")) {
-                System.out.println("Program checks only first argument\nAvailable arguments\n-h prints this message\n-t start in command line mode\n-g start in GUI mode (default)");
+                System.out.println("Program checks only first argument\nAvailable arguments\n-h prints this message\n-t start in command line mode (default)\n-g start in GUI mode (unimplemented)");
             } else if (args[0].equals("-t")) {
                 this.startCLI();
             } else if (args[0].equals("-g")) {
@@ -45,7 +46,7 @@ class MapController {
                 System.err.println("Unknown argument");
             }
         } else {
-            this.startGUI();
+            this.startCLI();
         }
     }
 
@@ -59,7 +60,8 @@ class MapController {
 
     /**
      * Return new Map object from name
-     * @return map
+     * @param name string
+     * @return map Map
      * @throws MapException if map file is invalid
      * @throws Exception if map is invalid or programmer forgot something
      */
@@ -69,7 +71,7 @@ class MapController {
 
     /**
      * Gets exising map
-     * @return map
+     * @return map Map
      */
     Map getMap() {
         return this.map;
@@ -77,7 +79,7 @@ class MapController {
 
      /**
      * Sets map
-     * @return map
+     * @param map Map
      */
     void setMap(Map map) {
         this.map = map;
@@ -114,12 +116,54 @@ class MapController {
      * Prints CLI prompt string
      */
     void printCLI() {
+        if (this.map != null) {
+            ArrayList<ArrayList<MapElement>> elements = this.map.getElemTypes();
+            ArrayList<MapElement> elementsLine;
+            MapElement element;
+            for (int i = 0; i < elements.size()+2; i++) {
+                System.out.print("+");
+            }
+            System.out.println();
+            for (int i = 0; i < elements.size(); i++) {
+                elementsLine = elements.get(i);
+                System.out.print("+");
+                for (int j = 0; j < elementsLine.size(); j++) {
+                    element = elementsLine.get(j);
+                    if (this.map.getPlayer().getCoords()[0] == j && this.map.getPlayer().getCoords()[1] == i) {
+                        System.out.print(new Player().getTermRepresentation().toUpperCase());
+                        continue;
+                    }
+                    if (element.isToggled()) {
+                        System.out.print(element.getTermRepresentation().toLowerCase());
+                    } else {
+                        System.out.print(element.getTermRepresentation().toUpperCase());
+                    }
+                }
+                System.out.print("+");
+                System.out.println();
+            }
+            for (int i = 0; i < elements.size()+2; i++) {
+                System.out.print("+");
+            }
+            System.out.println();
+        }
         String info = "";
-        if (this.getMap() != null) 
-            info += "Map name: "+this.getMap().getName()+"\n";
+        if (this.map != null && this.map.getPlayer().getKeys().size() > 0) {
+            info = "You have "+this.map.getPlayer().getKeys().size()+" unknown key";
+            if (this.map.getPlayer().getKeys().size() > 1)
+                info += "s.\n";
+            else
+                info += ".\n";
+        }
+        if (this.victory)
+            info += "Victory!\n";
+        if (this.map != null)
+            info += "Map name: "+this.map.getName()+"\n";
         info += "Available options: ";
-        if (this.getMap() != null) 
-            info += "wsad - move up,down,left,right; r - restart; ";
+        if (this.map != null && !this.victory)
+            info += "wsad - move up,down,left,right; ";
+        if (this.map != null)
+            info += "r - restart; ";
         info += "l - list available maps; m - load map; e - reload external maps; q - quit\n> ";
         System.out.print(info);
     }
@@ -135,7 +179,7 @@ class MapController {
     /**
      * Handles available input
      * @param in input string
-     * @param isGUI
+     * @param isGUI boolean
      * @return message
      * @throws Exception if map is invalid or programmer forgot something
      */
@@ -143,7 +187,7 @@ class MapController {
         String arg;
         String split[];
         Map map;
-        if (this.getMap() != null && !this.victory) {
+        if (this.map != null && !this.victory) {
             if (in.equals("w")) {
                 if (!this.moveLogic("w"))
                     return "Invalid move";
@@ -161,10 +205,12 @@ class MapController {
                     return "Invalid move";
                 return "";
             }
-        } else if (in.equals("r") && this.getMap() != null) {
+        }
+        if (in.equals("r") && this.map != null) {
             try {
-                map = this.getMap();
+                map = this.map;
                 this.setMap(this.returnMap(map.getName()));
+                this.victory = false;
                 return "Map reloaded";
             } catch (MapException e) {
                 return e.toString();
@@ -185,6 +231,7 @@ class MapController {
             }
             if (map != null) {
                 this.setMap(map);
+                this.victory = false;
                 return "New map set";
             }
             return "Invalid map name";
@@ -199,12 +246,12 @@ class MapController {
 
     /**
      * Check if move is possible
-     * @param direction
-     * @return success
+     * @param direction array of 2 integers
+     * @return success boolean
      * @throws Exception if map is invalid or programmer forgot something
      */
     boolean moveLogic(String direction) throws Exception {
-        Map map = this.getMap();
+        Map map = this.map;
         // variables below are for setting explicitly
         ArrayList<ArrayList<MapElement>> elements = map.getElemTypes();
         ArrayList<MapElement> elementsLine;
@@ -218,11 +265,11 @@ class MapController {
         switch (direction) {
             case "w":
                 move[0] = 0;
-                move[1] = 1;
+                move[1] = -1;
                 break;
             case "s":
                 move[0] = 0;
-                move[1] = -1;
+                move[1] = 1;
                 break;
             case "a":
                 move[0] = -1;
@@ -245,8 +292,10 @@ class MapController {
         } else if (new Exit().getClass().isInstance(element)) {
             this.victory = true;
             this.setMap(map);
-        } else if (new Gate().getClass().isInstance(element) || new Door().getClass().isInstance(element)) {
-            if (elements.get(coords[1]).get(coords[0]).isOpened()) {
+            coords[0] += move[0];
+            coords[1] += move[1];
+        } else if (new Gate().getClass().isInstance(element)) {
+            if (element.isToggled()) {
                 coords[0] += move[0];
                 coords[1] += move[1];
             } else {
@@ -260,12 +309,31 @@ class MapController {
                 for (int j = 0; j < elementsLine.size(); j++) {
                     toggledElementLine = elements.get(i);
                     toggledElement = toggledElementLine.get(j);
-                    if (new Gate().getClass().isInstance(toggledElement)) {
+                    if (new Gate().getClass().isInstance(toggledElement) && toggledElement.getLink() == element.getLink()) {
                         toggledElement.toggle();
                     }
                     toggledElementLine.set(j, toggledElement);
                     elements.set(i, toggledElementLine);
                 }
+            }
+        } else if (new Door().getClass().isInstance(element)) {
+            if (element.isToggled()) {
+                coords[0] += move[0];
+                coords[1] += move[1];
+            } else if (element.getLink() != 0) {
+                for (MapElement key : keys) {
+                    if (key.getLink() == element.getLink()) {
+                        if (!element.isToggled())
+                            element.toggle();
+                        coords[0] += move[0];
+                        coords[1] += move[1];
+                    }
+                }
+                if (!element.isToggled()) {
+                    return false;
+                }
+            } else {
+                return false;
             }
         } else if (new Key().getClass().isInstance(element)) {
             coords[0] += move[0];

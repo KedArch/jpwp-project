@@ -55,14 +55,14 @@ class Map {
     }
 
     /**
-     * @return name
+     * @return name string
      */
     String getName() {
         return name;
     }
 
     /**
-     * @param name
+     * @param name string
      */
     void setName(String name) {
         this.name = name;

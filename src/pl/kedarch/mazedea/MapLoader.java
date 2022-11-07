@@ -114,15 +114,18 @@ class MapLoader {
         MapElement tempElem;
         map = new Map();
         ArrayList<ArrayList<MapElement>> elemTypes = map.getElemTypes();
-        ArrayList<MapElement> tempTypes = new ArrayList<MapElement>();
+        ArrayList<MapElement> lineTypes = new ArrayList<MapElement>();
         ArrayList<MapElement> clonedTypes;
         Player player = map.getPlayer();
         Integer playerCoords[] = new Integer[2];
         Integer exitCoords[] = new Integer[2];
         Integer forbiddenWithoutComma[] = {2,3,4,5};
         while ((line = reader.readLine()) != null) {
-            tempTypes.clear();
+            lineTypes.clear();
             element = line.split(";");
+            if (element.length != 16) {
+                throw new MapException("Invalid map width "+element.length+" on line "+index+", map must be in 16x16 format! Problem in map "+name);
+            }
             for (int i = 0; i < element.length; i++) {
                 try {
                     if (element[i].contains(",")) {
@@ -143,52 +146,52 @@ class MapLoader {
                 }
                 switch (t) {
                     case 0:
-                        tempTypes.add(new Floor());
+                        lineTypes.add(new Floor());
                         break;
                     case 1:
-                        tempTypes.add(new Wall());
+                        lineTypes.add(new Wall());
                         break;
                     case 2:
                         tempElem = new Gate();
                         tempElem.setLink(l);
-                        tempTypes.add(tempElem);
+                        lineTypes.add(tempElem);
                         break;
                     case 3:
                         tempElem = new Level();
                         tempElem.setLink(l);
-                        tempTypes.add(tempElem);
+                        lineTypes.add(tempElem);
                         break;
                     case 4:
                         tempElem = new Door();
                         tempElem.setLink(l);
-                        tempTypes.add(tempElem);
+                        lineTypes.add(tempElem);
                         break;
                     case 5:
                         tempElem = new Key();
                         tempElem.setLink(l);
-                        tempTypes.add(tempElem);
+                        lineTypes.add(tempElem);
                         break;
                     case 6:
                         if (exitCoords[0] != null && exitCoords[1] != null) {
                             throw new MapException("Exit position already loaded, but got it again! Problem in map "+name+": row "+String.valueOf(index+1)+" column "+String.valueOf(i+1));
                         }
-                        exitCoords[0] = t;
+                        exitCoords[0] = i;
                         exitCoords[1] = index;
-                        tempTypes.add(new Exit());
+                        lineTypes.add(new Exit());
                         break;
                     case 7:
                         if (playerCoords[0] != null && playerCoords[1] != null) {
                             throw new MapException("Player position already loaded, but got it again! Problem in map "+name+": row "+String.valueOf(index+1)+" column "+String.valueOf(i+1));
                         }
-                        playerCoords[0] = t;
+                        playerCoords[0] = i;
                         playerCoords[1] = index;
-                        tempTypes.add(new Floor());
+                        lineTypes.add(new Floor());
                         break;
                     default:
                         throw new MapException("Type number not in <0,7>. Problem in map "+name+": row "+String.valueOf(index+1)+" column "+String.valueOf(i+1));
                 }
             }
-            clonedTypes = new ArrayList<MapElement>(tempTypes);
+            clonedTypes = new ArrayList<MapElement>(lineTypes);
             elemTypes.add(clonedTypes);
             index++;
         }
@@ -196,6 +199,9 @@ class MapLoader {
             if (playerCoords[i] == null) {
                 throw new MapException("Map "+name+" does not have Player or Exit!");
             }
+        }
+        if (elemTypes.size() != 16) {
+            throw new MapException("Invalid map height "+elemTypes.size()+", map must be in 16x16 format! Problem in map "+name);
         }
         map.setElemTypes(elemTypes);
         player.setCoords(playerCoords);
