@@ -3,7 +3,7 @@ package pl.kedarch.mazedea;
 /**
  * Abstract class used as base for openable elements
  */
-abstract class Toggable extends Linkable {
+abstract class Toggleable extends Linkable {
     /**
      * Variable holding info about element state
      */

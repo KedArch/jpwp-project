@@ -20,7 +20,6 @@ run-cli: build
 run-jar-cli: build-jar
 	@echo Running jar build
 	java -jar Mazedea.jar -t
-
 run-docker-new: build-docker disclaimer-docker
 	@docker run -ti --rm --net=host pl.kedarch.mazedea > /dev/null
 clear:
@@ -32,7 +31,6 @@ disclaimer-docker:
 	@echo "To connect to it you need VNC client."
 	@echo "Address is localhost:5900 or 127.0.0.1:5900. Password is 1234."
 	@echo "Press Ctrl+C to kill app."
-	
-build-docs: 
+build-docs:
 	rm -rf docs
 	javadoc -d docs -sourcepath src -private pl.kedarch.mazedea

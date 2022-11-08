@@ -23,13 +23,13 @@ abstract class MapElement {
     int getLink() {return 0;};
     /**
      * Default empty function
-     * @see pl.kedarch.mazedea.Toggable#toggle
+     * @see pl.kedarch.mazedea.Toggleable#toggle
      */
     void toggle() {};
     /**
      * Default empty function
      * @return false
-     * @see pl.kedarch.mazedea.Toggable#isToggled
+     * @see pl.kedarch.mazedea.Toggleable#isToggled
      */
     boolean isToggled() {return false;};
 }
