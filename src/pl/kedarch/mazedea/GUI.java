@@ -69,7 +69,7 @@ class GUI extends JFrame {
         this.images.add(ImageIO.read(new URL(resDirImage+new Level().getImage())));
         this.imagesToggled.add(ImageIO.read(new URL(resDirImage+new Level().getImageToggled())));
         this.images.add(ImageIO.read(new URL(resDirImage+new Door().getImage())));
-        this.imagesToggled.add(ImageIO.read(new URL(resDirImage+new Door().getImage())));
+        this.imagesToggled.add(ImageIO.read(new URL(resDirImage+new Door().getImageToggled())));
         this.images.add(ImageIO.read(new URL(resDirImage+new Key().getImage())));
         this.images.add(ImageIO.read(new URL(resDirImage+new Exit().getImage())));
         this.images.add(ImageIO.read(new URL(resDirImage+new Player().getImage())));
