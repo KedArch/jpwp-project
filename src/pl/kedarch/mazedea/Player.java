@@ -12,6 +12,20 @@ class Player extends MapElement {
     String getTermRepresentation() {
         return "P";
     }
+    /*
+     * @see pl.kedarch.mazedea.MapElement#getImage()
+     */
+    @Override
+    String getImage() {
+        return "player.png";
+    }
+    /*
+     * @see pl.kedarch.mazedea.MapElement#getImageToggled()
+     */
+    @Override
+    String getImageToggled() {
+        return "";
+    }
     /**
      * An array containing coordinates of player<br>
      * Arguments are playerX, playerY, in that sequence

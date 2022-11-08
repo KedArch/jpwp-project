@@ -11,4 +11,18 @@ class Gate extends Toggleable {
     String getTermRepresentation() {
         return "G";
     }
+    /*
+     * @see pl.kedarch.mazedea.MapElement#getImage()
+     */
+    @Override
+    String getImage() {
+        return "gate.png";
+    }
+    /*
+     * @see pl.kedarch.mazedea.MapElement#getImageToggled()
+     */
+    @Override
+    String getImageToggled() {
+        return "gate_opened.png";
+    }
 }

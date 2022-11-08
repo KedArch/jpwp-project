@@ -11,4 +11,18 @@ class Level extends Toggleable {
     String getTermRepresentation() {
         return "L";
     }
+    /*
+     * @see pl.kedarch.mazedea.MapElement#getImage()
+     */
+    @Override
+    String getImage() {
+        return "level.png";
+    }
+    /*
+     * @see pl.kedarch.mazedea.MapElement#getImageToggled()
+     */
+    @Override
+    String getImageToggled() {
+        return "level_toggled.png";
+    }
 }
