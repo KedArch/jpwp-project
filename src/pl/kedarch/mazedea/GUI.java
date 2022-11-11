@@ -3,14 +3,21 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.net.URL;
 import java.util.ArrayList;
-import javax.imageio.ImageIO;
-import javax.swing.JFrame;
 
+import javax.imageio.ImageIO;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 class MouseInput extends MouseAdapter {
     MapController control;
@@ -47,14 +54,40 @@ class MouseInput extends MouseAdapter {
     }
 }
 
+class KeyInput extends KeyAdapter {
+    MapController control;
+    GUI gui;
+    KeyInput(MapController control, GUI gui) {
+        this.control = control;
+        this.gui = gui;
+    }
+    public void keyTyped(KeyEvent e) {
+        String out = "";
+        try {
+            if (e.getKeyChar() == 'w') {
+                out = this.control.handleInput("w");
+            } else if (e.getKeyChar() == 's') {
+                out = this.control.handleInput("s");
+            } else if (e.getKeyChar() == 'a') {
+                out = this.control.handleInput("a");
+            } else if (e.getKeyChar() == 'd') {
+                out = this.control.handleInput("d");
+            } else {
+                out = this.control.handleInput(out);
+            }
+            this.gui.repaint();
+        } catch (Exception ex) {
+        }
+    }
+}
+
 class GUI extends JFrame {
     MapController control;
-    Map map;
     ArrayList<BufferedImage> images;
     ArrayList<BufferedImage> imagesToggled;
 
-    GUI (MapController control) throws Exception {
-        //ClassLoader loader = new Main().getClass().getClassLoader();
+    GUI (String name, MapController control) throws Exception {
+        super(name);
         this.setSize(new Dimension(1280,1024));
         this.control = control;
         this.control.handleInput("m tutorial");
@@ -74,15 +107,37 @@ class GUI extends JFrame {
         this.images.add(ImageIO.read(new URL(resDirImage+new Exit().getImage())));
         this.images.add(ImageIO.read(new URL(resDirImage+new Player().getImage())));
         this.addMouseListener(new MouseInput(this.control, this));
+        this.addKeyListener(new KeyInput(this.control, this));
+        this.setResizable(false);
+        this.setLayout(null);
+        JPanel panel = new JPanel();
+        panel.setSize(256, 1024);
+        JLabel label = new JLabel("test");
+        label.setBounds(2, 0, 64, 64);
+        label.setForeground(Color.black);
+        label.setBackground(Color.lightGray);
+        label.setOpaque(true);
+        label.setHorizontalAlignment(SwingConstants.CENTER);
+        label.setVerticalAlignment(SwingConstants.CENTER);
+        panel.setLayout(null);
+        panel.setLocation(1152,0);
+        String list[] = {"x","y","xsaas","xsass"};
+        JComboBox cb = new JComboBox(list);
+        cb.setBounds(70, 0, 64, 20);
+        panel.add(label);
+        panel.add(cb);
+        this.setFocusable(true);
+        this.add(panel);
         this.setVisible(true);
     }
 
     @Override
     public void paint(Graphics g) {
+        super.paintComponents(g);
         Graphics2D g2 = (Graphics2D) g;
         g2.setColor(Color.WHITE);
-        g2.fillRect(0, 0, 1280, 1024);
-        map = this.control.getMap();
+        g2.fillRect(0, 0, 1152, 1024);
+        Map map = this.control.getMap();
         ArrayList<ArrayList<MapElement>> elements = map.getElemTypes();
         MapElement element;
         for (int i = 0; i < elements.size(); i++) {
@@ -120,7 +175,7 @@ class GUI extends JFrame {
                 }
             }
         }
-        g2.setColor(Color.BLACK);
-        g2.fillRect(1024,0,2,1024);
+        g2.setColor(new Color(120,120,120));
+        g2.fillRect(1150,0,4,1024);
     }
 }

@@ -180,7 +180,7 @@ class MapController {
      * @throws Exception if map is invalid or programmer forgot something
      */
     void startGUI() throws Exception {
-        new GUI(this);
+        new GUI("Mazedea", this);
     }
 
     /**
