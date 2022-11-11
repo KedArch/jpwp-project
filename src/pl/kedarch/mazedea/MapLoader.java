@@ -123,8 +123,8 @@ class MapLoader {
         while ((line = reader.readLine()) != null) {
             lineTypes.clear();
             element = line.split(";");
-            if (element.length != 16) {
-                throw new MapException("Invalid map width "+element.length+" on line "+index+", map must be in 16x16 format! Problem in map "+name);
+            if (element.length != 18) {
+                throw new MapException("Invalid map width "+element.length+" on line "+index+", map must be in 18x16 format! Problem in map "+name);
             }
             for (int i = 0; i < element.length; i++) {
                 try {
@@ -201,7 +201,7 @@ class MapLoader {
             }
         }
         if (elemTypes.size() != 16) {
-            throw new MapException("Invalid map height "+elemTypes.size()+", map must be in 16x16 format! Problem in map "+name);
+            throw new MapException("Invalid map height "+elemTypes.size()+", map must be in 18x16 format! Problem in map "+name);
         }
         map.setElemTypes(elemTypes);
         player.setCoords(playerCoords);
