@@ -101,7 +101,7 @@ class MapLoader {
         if (this.mapNames.indexOf(name) < this.defaultMapAmount){
             path = resDir+"maps/"+name+".map";
         } else {
-            path = appPath+"maps/"+name+".map";
+            path = "file:"+appPath+"/maps/"+name+".map";
         }
         URL file = new URL(path);
         BufferedReader reader = new BufferedReader(new InputStreamReader(file.openStream()));
