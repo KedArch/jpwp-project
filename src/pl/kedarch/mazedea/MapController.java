@@ -85,6 +85,13 @@ class MapController {
     }
 
     /**
+     * Gets information about victory
+     * @return victory boolean
+     */
+    boolean getVictory() {
+        return this.victory;
+    }
+    /**
      * @return mapList ArrayList
      * @see pl.kedarch.mazedea.MapLoader#getMapNames()
      */
