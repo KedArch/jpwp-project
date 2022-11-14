@@ -15,6 +15,7 @@ import java.net.URL;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -79,6 +80,7 @@ class KeyInput extends KeyAdapter {
             this.gui.updateGameInfo();
             this.gui.rePaint();
         } catch (Exception ex) {
+            ex.printStackTrace(System.out);
         }
         this.gui.paintPanel.requestFocusInWindow();
     }
@@ -98,6 +100,50 @@ class BtnSelect implements ActionListener {
         } catch (Exception ex) {
             ex.printStackTrace(System.out);
         }
+        this.gui.paintPanel.requestFocusInWindow();
+    }
+}
+
+class BtnRestart implements ActionListener {
+    GUI gui;
+    BtnRestart(GUI gui) {
+        this.gui = gui;
+    }
+    public void actionPerformed(ActionEvent e) {
+        try {
+            this.gui.control.handleInput("r");
+        } catch (Exception ex) {
+            ex.printStackTrace(System.out);
+        }
+        this.gui.rePaint();
+        this.gui.paintPanel.requestFocusInWindow();
+    }
+}
+
+class BtnReloadMaps implements ActionListener {
+    GUI gui;
+    BtnReloadMaps(GUI gui) {
+        this.gui = gui;
+    }
+    public void actionPerformed(ActionEvent e) {
+        try {
+            this.gui.control.handleInput("e");
+        } catch (Exception ex) {
+            ex.printStackTrace(System.out);
+        }
+        this.gui.mapSelection.removeAllItems();
+        this.gui.mapSelection.setModel(new DefaultComboBoxModel(this.gui.control.getMapLoader().getMapNames().toArray()));
+        this.gui.paintPanel.requestFocusInWindow();
+    }
+}
+
+class BtnQuit implements ActionListener {
+    GUI gui;
+    BtnQuit(GUI gui) {
+        this.gui = gui;
+    }
+    public void actionPerformed(ActionEvent e) {
+        System.exit(0);
     }
 }
 
@@ -174,9 +220,9 @@ class GUI extends JFrame {
     JTextArea infoArea;
     JComboBox mapSelection;
     AppJButton mapSelectionButton;
-    AppJButton brestart;
-    AppJButton breloadem;
-    AppJButton bquit;
+    AppJButton restartButton;
+    AppJButton reloadMapsButton;
+    AppJButton quitButton;
 
     GUI (String name, MapController control) throws Exception {
         super(name);
@@ -221,17 +267,20 @@ class GUI extends JFrame {
         mapSelectionButton = new AppJButton("<html>Load map<br>selected above");
         mapSelectionButton.setBounds(0, 158, 126, 40);
         mapSelectionButton.addActionListener(new BtnSelect(this));
-        brestart = new AppJButton("Restart map");
-        brestart.setBounds(0, 198, 126, 30);
-        breloadem = new AppJButton("<html>Reload<br>external maps");
-        breloadem.setBounds(0, 228, 126, 40);
-        bquit = new AppJButton("Quit");
-        bquit.setBounds(0, 268, 126, 30);
+        restartButton = new AppJButton("Restart map");
+        restartButton.setBounds(0, 198, 126, 30);
+        restartButton.addActionListener(new BtnRestart(this));
+        reloadMapsButton = new AppJButton("<html>Reload<br>maps");
+        reloadMapsButton.setBounds(0, 228, 126, 40);
+        reloadMapsButton.addActionListener(new BtnReloadMaps(this));
+        quitButton = new AppJButton("Quit");
+        quitButton.setBounds(0, 268, 126, 30);
+        quitButton.addActionListener(new BtnQuit(this));
         panel.add(infoArea);
         panel.add(mapSelectionButton);
-        panel.add(brestart);
-        panel.add(breloadem);
-        panel.add(bquit);
+        panel.add(restartButton);
+        panel.add(reloadMapsButton);
+        panel.add(quitButton);
         panel.add(mapSelection);
         paintPanel = new PaintPanel(this);
         paintPanel.setSize(1154, 1024);

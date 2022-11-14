@@ -50,7 +50,7 @@ class MapController {
     }
 
     /**
-     * Reload external maps from $appPath$/maps
+     * Reload maps from $appPath$/maps
      * @throws Exception if map is invalid or programmer forgot something
      */
     void reloadMaps() throws Exception {
@@ -178,7 +178,7 @@ class MapController {
             info += "wsad - move up,down,left,right; ";
         if (this.map != null)
             info += "r - restart; ";
-        info += "l - list available maps; m - load map; e - reload external maps; q - quit\n> ";
+        info += "l - list available maps; m - load map; e - reload maps; q - quit\n> ";
         System.out.print(info);
     }
 
@@ -199,7 +199,6 @@ class MapController {
     String handleInput(String in) throws Exception {
         String arg;
         String split[];
-        Map map;
         if (this.map != null && !this.victory) {
             if (in.equals("w")) {
                 if (!this.moveLogic("w"))
@@ -221,8 +220,7 @@ class MapController {
         }
         if (in.equals("r") && this.map != null) {
             try {
-                map = this.map;
-                this.setMap(this.returnMap(map.getName()));
+                this.setMap(this.returnMap(this.map.getName()));
                 this.victory = false;
                 return "Map reloaded";
             } catch (MapException e) {
@@ -250,7 +248,7 @@ class MapController {
             return "Invalid map name";
         } else if (in.equals("e")) {
             this.reloadMaps();
-            return "External maps reloaded";
+            return "Maps reloaded";
         } else if (in.equals("q")) {
             return null;
         }
