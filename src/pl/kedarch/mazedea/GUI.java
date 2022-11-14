@@ -115,6 +115,7 @@ class BtnRestart implements ActionListener {
         } catch (Exception ex) {
             ex.printStackTrace(System.out);
         }
+        this.gui.updateGameInfo();
         this.gui.rePaint();
         this.gui.paintPanel.requestFocusInWindow();
     }
