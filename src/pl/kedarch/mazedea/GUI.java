@@ -15,6 +15,7 @@ import java.net.URL;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -311,11 +312,11 @@ class GUI extends JFrame {
      */
     MapController control;
     /**
-     *
+     * Images list
      */
     ArrayList<BufferedImage> images;
     /**
-     *
+     * Images of toggled state for supported elements
      */
     ArrayList<BufferedImage> imagesToggled;
     /**
@@ -387,27 +388,48 @@ class GUI extends JFrame {
         infoArea.setLineWrap(true);
         infoArea.setWrapStyleWord(true);
         infoArea.setEditable(false);
-        infoArea.setFont(new Font("Comic Sans", Font.PLAIN, 15));
         infoArea.setBounds(0, 0, 126, 128);
+        infoArea.setFont(new Font("Comic Sans", Font.PLAIN, 15));
         infoArea.setForeground(Color.darkGray);
         infoArea.setBackground(new Color(120,160,60));
+        infoArea.setBorder(BorderFactory.createLineBorder(new Color(0,100,0),1));
         infoArea.setOpaque(true);
         infoArea.setFocusable(false);
         mapSelection = new JComboBox(this.control.getMapLoader().getMapNames().toArray());
-        mapSelection.setBounds(0, 128, 128, 30);
+        mapSelection.setBounds(0, 128, 126, 30);
+        mapSelection.setFont(new Font("Comic Sans", Font.PLAIN, 15));
+        mapSelection.setForeground(Color.darkGray);
+        mapSelection.setBackground(new Color(120,160,60));
+        mapSelection.setBorder(BorderFactory.createLineBorder(new Color(0,100,0),1));
         mapSelection.setSelectedIndex(0);
         mapSelection.setFocusable(true);
         mapSelectionButton = new AppJButton("<html>Load map<br>selected above");
-        mapSelectionButton.setBounds(0, 158, 126, 40);
+        mapSelectionButton.setBounds(0, 158, 126, 50);
+        mapSelectionButton.setFont(new Font("Comic Sans", Font.PLAIN, 13));
+        mapSelectionButton.setForeground(Color.darkGray);
+        mapSelectionButton.setBackground(new Color(120,160,60));
+        mapSelectionButton.setBorder(BorderFactory.createLineBorder(new Color(0,100,0),1));
         mapSelectionButton.addActionListener(new BtnSelect(this));
         restartButton = new AppJButton("Restart map");
-        restartButton.setBounds(0, 198, 126, 30);
+        restartButton.setBounds(0, 208, 126, 30);
+        restartButton.setFont(new Font("Comic Sans", Font.PLAIN, 15));
+        restartButton.setForeground(Color.darkGray);
+        restartButton.setBackground(new Color(120,160,60));
+        restartButton.setBorder(BorderFactory.createLineBorder(new Color(0,100,0),1));
         restartButton.addActionListener(new BtnRestart(this));
-        reloadMapsButton = new AppJButton("<html>Reload<br>maps");
-        reloadMapsButton.setBounds(0, 228, 126, 40);
+        reloadMapsButton = new AppJButton("Reload maps");
+        reloadMapsButton.setBounds(0, 238, 126, 30);
+        reloadMapsButton.setFont(new Font("Comic Sans", Font.PLAIN, 15));
+        reloadMapsButton.setForeground(Color.darkGray);
+        reloadMapsButton.setBackground(new Color(120,160,60));
+        reloadMapsButton.setBorder(BorderFactory.createLineBorder(new Color(0,100,0),1));
         reloadMapsButton.addActionListener(new BtnReloadMaps(this));
         quitButton = new AppJButton("Quit");
         quitButton.setBounds(0, 268, 126, 30);
+        quitButton.setFont(new Font("Comic Sans", Font.PLAIN, 15));
+        quitButton.setForeground(Color.darkGray);
+        quitButton.setBackground(new Color(120,160,60));
+        quitButton.setBorder(BorderFactory.createLineBorder(new Color(0,100,0),1));
         quitButton.addActionListener(new BtnQuit(this));
         panel.add(infoArea);
         panel.add(mapSelectionButton);
