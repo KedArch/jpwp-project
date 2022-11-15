@@ -75,6 +75,7 @@ class MapLoader {
      * Scheme for creating maps<br>
      * 0,0;0,0<br>
      * 1,1;2,1<br>
+     * Format 18x16
      * Every line corresponds to row in game<br>
      * Strings separated by semicolon are related to columns<br>
      * Comma splits that string into 2 numbers, describing type and attribute<br>

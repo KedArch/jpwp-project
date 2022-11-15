@@ -13,5 +13,5 @@ It is a simple maze game made as serious game in mind, with levels, gates, doors
 ## Known bugs
 - none known at time of writing :)
 ## Todo
-- images for GUI elements
-- GUI interface as whole
+- Map editor
+- More maps?

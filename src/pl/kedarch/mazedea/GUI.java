@@ -22,14 +22,26 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
+/**
+ * Adapter for click events on painted panel
+ */
 class MouseInput extends MouseAdapter {
+    /**
+     * @see pl.kedarch.mazedea.GUI
+     */
     GUI gui;
+    /**
+     * @param gui to control
+     */
     MouseInput(GUI gui) {
         this.gui = gui;
     }
+    /* (non-Javadoc)
+     * @see java.awt.event.MouseAdapter#mouseClicked(java.awt.event.MouseEvent)
+     */
     public void mouseClicked(MouseEvent e) {
-        int x = (int)Math.ceil(e.getX() / 64);
-        int y = (int)Math.ceil(e.getY() / 64);
+        int x = Double.valueOf(Math.ceil(e.getX() / 64)).intValue();
+        int y = Double.valueOf(Math.ceil(e.getY() / 64)).intValue();
         if (x < 16) {
             Map map = this.gui.control.getMap();
             if (map != null) {
@@ -49,7 +61,7 @@ class MouseInput extends MouseAdapter {
                     } else {
                         out = this.gui.control.handleInput(out);
                     }
-                    this.gui.rePaint();
+                    this.gui.paintPanel.repaint();
                 } catch (Exception ex) {
                 }
             }
@@ -58,11 +70,23 @@ class MouseInput extends MouseAdapter {
     }
 }
 
+/**
+ * Adapter for key events on painted panel
+ */
 class KeyInput extends KeyAdapter {
+     /**
+     * @see pl.kedarch.mazedea.GUI
+     */
     GUI gui;
+    /**
+     * @param gui to control
+     */
     KeyInput(GUI gui) {
         this.gui = gui;
     }
+    /* (non-Javadoc)
+     * @see java.awt.event.KeyAdapter#keyTyped(java.awt.event.KeyEvent)
+     */
     public void keyTyped(KeyEvent e) {
         String out = "";
         try {
@@ -78,7 +102,7 @@ class KeyInput extends KeyAdapter {
                 out = this.gui.control.handleInput(out);
             }
             this.gui.updateGameInfo();
-            this.gui.rePaint();
+            this.gui.paintPanel.repaint();
         } catch (Exception ex) {
             ex.printStackTrace(System.out);
         }
@@ -86,17 +110,29 @@ class KeyInput extends KeyAdapter {
     }
 }
 
+/**
+ * Listener for select button
+ */
 class BtnSelect implements ActionListener {
+     /**
+     * @see pl.kedarch.mazedea.GUI
+     */
     GUI gui;
+    /**
+     * @param gui to control
+     */
     BtnSelect(GUI gui) {
         this.gui = gui;
     }
+    /* (non-Javadoc)
+     * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+     */
     public void actionPerformed(ActionEvent e) {
         String mapName = String.valueOf(this.gui.mapSelection.getSelectedItem());
         try {
             this.gui.control.handleInput("m "+mapName);
             this.gui.updateGameInfo();
-            this.gui.rePaint();
+            this.gui.paintPanel.repaint();
         } catch (Exception ex) {
             ex.printStackTrace(System.out);
         }
@@ -104,11 +140,23 @@ class BtnSelect implements ActionListener {
     }
 }
 
+/**
+ * Listener for restart button
+ */
 class BtnRestart implements ActionListener {
+     /**
+     * @see pl.kedarch.mazedea.GUI
+     */
     GUI gui;
+    /**
+     * @param gui to control
+     */
     BtnRestart(GUI gui) {
         this.gui = gui;
     }
+    /* (non-Javadoc)
+     * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+     */
     public void actionPerformed(ActionEvent e) {
         try {
             this.gui.control.handleInput("r");
@@ -116,16 +164,28 @@ class BtnRestart implements ActionListener {
             ex.printStackTrace(System.out);
         }
         this.gui.updateGameInfo();
-        this.gui.rePaint();
+        this.gui.paintPanel.repaint();
         this.gui.paintPanel.requestFocusInWindow();
     }
 }
 
+/**
+ * Listener for reload maps button
+ */
 class BtnReloadMaps implements ActionListener {
+     /**
+     * @see pl.kedarch.mazedea.GUI
+     */
     GUI gui;
+    /**
+     * @param gui to control
+     */
     BtnReloadMaps(GUI gui) {
         this.gui = gui;
     }
+    /* (non-Javadoc)
+     * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+     */
     public void actionPerformed(ActionEvent e) {
         try {
             this.gui.control.handleInput("e");
@@ -138,28 +198,58 @@ class BtnReloadMaps implements ActionListener {
     }
 }
 
+/**
+ * Listener for quit button
+ */
 class BtnQuit implements ActionListener {
+     /**
+     * @see pl.kedarch.mazedea.GUI
+     */
     GUI gui;
+    /**
+     * @param gui to control
+     */
     BtnQuit(GUI gui) {
         this.gui = gui;
     }
+    /* (non-Javadoc)
+     * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+     */
     public void actionPerformed(ActionEvent e) {
         System.exit(0);
     }
 }
 
+/**
+ * Class for all app buttons
+ */
 class AppJButton extends JButton {
+    /**
+     * @param text String to display
+     */
     AppJButton(String text) {
         super(text);
         this.setFocusable(false);
     }
 }
 
+/**
+ * Game's paintable panel
+ */
 class PaintPanel extends JPanel {
+     /**
+     * @see pl.kedarch.mazedea.GUI
+     */
     GUI gui;
+    /**
+     * @param gui to control
+     */
     PaintPanel(GUI gui) {
         this.gui = gui;
     }
+    /* (non-Javadoc)
+     * @see javax.swing.JComponent#paint(java.awt.Graphics)
+     */
     @Override
     public void paint(Graphics g) {
         super.paintComponents(g);
@@ -212,19 +302,61 @@ class PaintPanel extends JPanel {
 
 }
 
+/**
+ * Main window
+ */
 class GUI extends JFrame {
+    /**
+     * @see pl.kedarch.mazedea.MapController
+     */
     MapController control;
+    /**
+     *
+     */
     ArrayList<BufferedImage> images;
+    /**
+     *
+     */
     ArrayList<BufferedImage> imagesToggled;
+    /**
+     * Panel containing all JObjects
+     */
     JPanel panel;
+    /**
+     * Main paintable panel
+     */
     JPanel paintPanel;
+    /**
+     * Information area
+     */
     JTextArea infoArea;
+    /**
+     * Map list
+     */
     JComboBox mapSelection;
+    /**
+     * Map selection button
+     */
     AppJButton mapSelectionButton;
+    /**
+     * Restart button
+     */
     AppJButton restartButton;
+    /**
+     * Reload maps button
+     */
     AppJButton reloadMapsButton;
+    /**
+     * Quit button
+     */
     AppJButton quitButton;
 
+    /**
+     * Initializes GUI
+     * @param name for window
+     * @param control MapController object
+     * @throws Exception if programmer forgot something
+     */
     GUI (String name, MapController control) throws Exception {
         super(name);
         this.setSize(new Dimension(1280,1024));
@@ -295,11 +427,9 @@ class GUI extends JFrame {
         this.setVisible(true);
     }
 
-    void rePaint() {
-        super.repaint();
-        this.panel.requestFocus();
-    }
-
+    /**
+     * Updates infoArea
+     */
     void updateGameInfo() {
         String text = "Current map:\n"+this.control.getMap().getName()+"\n";
         int keyCount = this.control.getMap().getPlayer().getKeys().size();
