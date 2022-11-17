@@ -1,28 +1,28 @@
 package pl.kedarch.mazedea;
 
 /**
- * Class which does not block player
+ * Element toggling gates with the same link
  */
-class Floor extends MapElement {
+class Lever extends Toggleable {
     /*
      * @see pl.kedarch.mazedea.MapElement#getTermRepresentation()
      */
     @Override
     String getTermRepresentation() {
-        return "-";
+        return "L";
     }
     /*
      * @see pl.kedarch.mazedea.MapElement#getImage()
      */
     @Override
     String getImage() {
-        return "floor.png";
+        return "lever.png";
     }
     /*
      * @see pl.kedarch.mazedea.MapElement#getImageToggled()
      */
     @Override
     String getImageToggled() {
-        return "";
+        return "lever_toggled.png";
     }
 }

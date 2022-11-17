@@ -75,16 +75,17 @@ class MapLoader {
      * Scheme for creating maps<br>
      * 0,0;0,0<br>
      * 1,1;2,1<br>
+     * Format 18x16
      * Every line corresponds to row in game<br>
      * Strings separated by semicolon are related to columns<br>
      * Comma splits that string into 2 numbers, describing type and attribute<br>
-     * Saved in map.elemAttribs, attributes are used to link gates, doors, keys and levels<br>
+     * Saved in map.elemAttribs, attributes are used to link gates, doors, keys and levers<br>
      * Saved in map.elemTypes, types describe entities present on map<br>
      * Type list:<br>
      * 0 - Floor (attribute not used)<br>
      * 1 - Wall (attribute not used)<br>
      * 2 - Gate<br>
-     * 3 - Level<br>
+     * 3 - Lever<br>
      * 4 - Door<br>
      * 5 - Key<br>
      * 6 - Exit (attribute not used; only one)<br>
@@ -123,8 +124,8 @@ class MapLoader {
         while ((line = reader.readLine()) != null) {
             lineTypes.clear();
             element = line.split(";");
-            if (element.length != 16) {
-                throw new MapException("Invalid map width "+element.length+" on line "+index+", map must be in 16x16 format! Problem in map "+name);
+            if (element.length != 18) {
+                throw new MapException("Invalid map width "+element.length+" on line "+index+", map must be in 18x16 format! Problem in map "+name);
             }
             for (int i = 0; i < element.length; i++) {
                 try {
@@ -157,7 +158,7 @@ class MapLoader {
                         lineTypes.add(tempElem);
                         break;
                     case 3:
-                        tempElem = new Level();
+                        tempElem = new Lever();
                         tempElem.setLink(l);
                         lineTypes.add(tempElem);
                         break;
@@ -201,7 +202,7 @@ class MapLoader {
             }
         }
         if (elemTypes.size() != 16) {
-            throw new MapException("Invalid map height "+elemTypes.size()+", map must be in 16x16 format! Problem in map "+name);
+            throw new MapException("Invalid map height "+elemTypes.size()+", map must be in 18x16 format! Problem in map "+name);
         }
         map.setElemTypes(elemTypes);
         player.setCoords(playerCoords);

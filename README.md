@@ -3,15 +3,21 @@ Project for university subject about high level programming languages.
 ## Description
 It is a simple maze game made as serious game in mind, with levels, gates, doors and keys. There is no indication how elements are connected which forces player to think in advance, use memory, logic and problem solving abilites to achieve exit.
 ## Features
-- custom map loading is possible if placed in maps/map_name.map. MapLoader.returnMap class function has description how one can add more maps.
+- GUI in Java Swing
 - terminal (CLI) interface
 - dockerfile (for GUI via VNC)
-- makefile for automatic building of app, jar, docker image or docs
+- custom map loading is possible if placed in maps/map_name.map. MapLoader.returnMap class function has description how one can add more maps.
+- makefile for automatic building and running of app, jar, docker image or docs
 ## Technical limitations
-- map is limited to 16x16 elements (no more or less)
-- game was made with OpenJDK 17 in mind, others may work or not
+- window is fixed 1280x1024
+- map is limited to 18x16 elements (no more or less, may be changed later)
+- game was made with OpenJDK 17 in mind, other versions are not guaranteed to work
+- provided makefile is expected to work on Linux system, others are not guaranteed to work
 ## Known bugs
 - none known at time of writing :)
 ## Todo
-- images for GUI elements
-- GUI interface as whole
+- more than one link (to make Level-Gate logic more flexible)
+- UI polishing
+- statistics (like move count and time)
+- map editor
+- more maps?
