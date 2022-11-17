@@ -274,7 +274,7 @@ class PaintPanel extends JPanel {
                         } else {
                             g2.drawImage(this.gui.images.get(2), j*64, i*64, null);
                         }
-                    } else if (new Level().getClass().isInstance(element)) {
+                    } else if (new Lever().getClass().isInstance(element)) {
                         if (element.isToggled()) {
                             g2.drawImage(this.gui.imagesToggled.get(1), j*64, i*64, null);
                         } else {
@@ -370,8 +370,8 @@ class GUI extends JFrame {
         this.images.add(ImageIO.read(new URL(resDirImage+new Wall().getImage())));
         this.images.add(ImageIO.read(new URL(resDirImage+new Gate().getImage())));
         this.imagesToggled.add(ImageIO.read(new URL(resDirImage+new Gate().getImageToggled())));
-        this.images.add(ImageIO.read(new URL(resDirImage+new Level().getImage())));
-        this.imagesToggled.add(ImageIO.read(new URL(resDirImage+new Level().getImageToggled())));
+        this.images.add(ImageIO.read(new URL(resDirImage+new Lever().getImage())));
+        this.imagesToggled.add(ImageIO.read(new URL(resDirImage+new Lever().getImageToggled())));
         this.images.add(ImageIO.read(new URL(resDirImage+new Door().getImage())));
         this.imagesToggled.add(ImageIO.read(new URL(resDirImage+new Door().getImageToggled())));
         this.images.add(ImageIO.read(new URL(resDirImage+new Key().getImage())));

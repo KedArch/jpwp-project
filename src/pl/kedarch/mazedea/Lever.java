@@ -3,7 +3,7 @@ package pl.kedarch.mazedea;
 /**
  * Element toggling gates with the same link
  */
-class Level extends Toggleable {
+class Lever extends Toggleable {
     /*
      * @see pl.kedarch.mazedea.MapElement#getTermRepresentation()
      */
@@ -16,13 +16,13 @@ class Level extends Toggleable {
      */
     @Override
     String getImage() {
-        return "level.png";
+        return "lever.png";
     }
     /*
      * @see pl.kedarch.mazedea.MapElement#getImageToggled()
      */
     @Override
     String getImageToggled() {
-        return "level_toggled.png";
+        return "lever_toggled.png";
     }
 }

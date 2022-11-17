@@ -1,7 +1,7 @@
 package pl.kedarch.mazedea;
 
 /**
- * Element describing gates which can be toggled by linked levels
+ * Element describing gates which can be toggled by linked levers
  */
 class Gate extends Toggleable {
     /*

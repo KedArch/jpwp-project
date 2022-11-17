@@ -312,7 +312,7 @@ class MapController {
             } else {
                 return false;
             }
-        } else if (new Level().getClass().isInstance(element)) {
+        } else if (new Lever().getClass().isInstance(element)) {
             coords[0] += move[0];
             coords[1] += move[1];
             element.toggle();

@@ -79,13 +79,13 @@ class MapLoader {
      * Every line corresponds to row in game<br>
      * Strings separated by semicolon are related to columns<br>
      * Comma splits that string into 2 numbers, describing type and attribute<br>
-     * Saved in map.elemAttribs, attributes are used to link gates, doors, keys and levels<br>
+     * Saved in map.elemAttribs, attributes are used to link gates, doors, keys and levers<br>
      * Saved in map.elemTypes, types describe entities present on map<br>
      * Type list:<br>
      * 0 - Floor (attribute not used)<br>
      * 1 - Wall (attribute not used)<br>
      * 2 - Gate<br>
-     * 3 - Level<br>
+     * 3 - Lever<br>
      * 4 - Door<br>
      * 5 - Key<br>
      * 6 - Exit (attribute not used; only one)<br>
@@ -158,7 +158,7 @@ class MapLoader {
                         lineTypes.add(tempElem);
                         break;
                     case 3:
-                        tempElem = new Level();
+                        tempElem = new Lever();
                         tempElem.setLink(l);
                         lineTypes.add(tempElem);
                         break;
