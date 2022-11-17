@@ -1,7 +1,7 @@
 # jpwp-project (codename Mazedea)
 Project for university subject about high level programming languages.
 ## Description
-It is a simple maze game made as serious game in mind, with levels, gates, doors and keys. There is no indication how elements are connected which forces player to think in advance, use memory, logic and problem solving abilites to achieve exit.
+It is a simple maze game made as serious game in mind, with levers, gates, doors and keys. There is no indication how elements are connected which forces player to think in advance, use memory, logic and problem solving abilites to achieve exit.
 ## Features
 - GUI in Java Swing
 - terminal (CLI) interface
