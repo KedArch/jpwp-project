@@ -270,21 +270,21 @@ class PaintPanel extends JPanel {
                         g2.drawImage(this.gui.images.get(1), j*64, i*64, null);
                     } else if (new Gate().getClass().isInstance(element)) {
                         if (element.isToggled()) {
-                            g2.drawImage(this.gui.images.get(2), j*64, i*64, null);
-                        } else {
                             g2.drawImage(this.gui.imagesToggled.get(0), j*64, i*64, null);
+                        } else {
+                            g2.drawImage(this.gui.images.get(2), j*64, i*64, null);
                         }
                     } else if (new Level().getClass().isInstance(element)) {
                         if (element.isToggled()) {
-                            g2.drawImage(this.gui.images.get(3), j*64, i*64, null);
-                        } else {
                             g2.drawImage(this.gui.imagesToggled.get(1), j*64, i*64, null);
+                        } else {
+                            g2.drawImage(this.gui.images.get(3), j*64, i*64, null);
                         }
                     } else if (new Door().getClass().isInstance(element)) {
                         if (element.isToggled()) {
-                            g2.drawImage(this.gui.images.get(4), j*64, i*64, null);
-                        } else {
                             g2.drawImage(this.gui.imagesToggled.get(2), j*64, i*64, null);
+                        } else {
+                            g2.drawImage(this.gui.images.get(4), j*64, i*64, null);
                         }
                     } else if (new Key().getClass().isInstance(element)) {
                         g2.drawImage(this.gui.images.get(5), j*64, i*64, null);
