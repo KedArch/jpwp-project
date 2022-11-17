@@ -11,4 +11,18 @@ class Exit extends MapElement {
     String getTermRepresentation() {
         return "E";
     }
+    /*
+     * @see pl.kedarch.mazedea.MapElement#getImage()
+     */
+    @Override
+    String getImage() {
+        return "exit.png";
+    }
+    /*
+     * @see pl.kedarch.mazedea.MapElement#getImageToggled()
+     */
+    @Override
+    String getImageToggled() {
+        return "";
+    }
 }

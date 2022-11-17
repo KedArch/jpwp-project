@@ -11,4 +11,18 @@ class Door extends Toggleable {
     String getTermRepresentation() {
         return "D";
     }
+    /*
+     * @see pl.kedarch.mazedea.MapElement#getImage()
+     */
+    @Override
+    String getImage() {
+        return "door.png";
+    }
+    /*
+     * @see pl.kedarch.mazedea.MapElement#getImageToggled()
+     */
+    @Override
+    String getImageToggled() {
+        return "door_opened.png";
+    }
 }

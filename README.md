@@ -8,10 +8,10 @@ It is a simple maze game made as serious game in mind, with levels, gates, doors
 - dockerfile (for GUI via VNC)
 - makefile for automatic building of app, jar, docker image or docs
 ## Technical limitations
-- map is limited to 16x16 elements (no more or less)
+- map is limited to 18x16 elements (no more or less)
 - game was made with OpenJDK 17 in mind, others may work or not
 ## Known bugs
 - none known at time of writing :)
 ## Todo
-- images for GUI elements
-- GUI interface as whole
+- Map editor
+- More maps?

@@ -1,5 +1,4 @@
 package pl.kedarch.mazedea;
-
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
@@ -37,7 +36,7 @@ class MapController {
     void start(final String[] args) throws Exception {
         if (args.length > 0) {
             if (args[0].equals("-h")) {
-                System.out.println("Program checks only first argument\nAvailable arguments\n-h prints this message\n-t start in command line mode (default)\n-g start in GUI mode (unimplemented)");
+                System.out.println("Program checks only first argument\nAvailable arguments\n-h prints this message\n-t start in command line mode\n-g start in GUI mode (default)");
             } else if (args[0].equals("-t")) {
                 this.startCLI();
             } else if (args[0].equals("-g")) {
@@ -46,12 +45,12 @@ class MapController {
                 System.err.println("Unknown argument");
             }
         } else {
-            this.startCLI();
+            this.startGUI();
         }
     }
 
     /**
-     * Reload external maps from $appPath$/maps
+     * Reload maps from $appPath$/maps
      * @throws Exception if map is invalid or programmer forgot something
      */
     void reloadMaps() throws Exception {
@@ -86,6 +85,21 @@ class MapController {
     }
 
     /**
+     * Gets information about victory
+     * @return victory boolean
+     */
+    boolean getVictory() {
+        return this.victory;
+    }
+    /**
+     * @return mapList ArrayList
+     * @see pl.kedarch.mazedea.MapLoader#getMapNames()
+     */
+    MapLoader getMapLoader() {
+        return this.maps;
+    }
+
+    /**
      * Starts CLI version
      * @throws Exception if map is invalid or programmer forgot something
      */
@@ -96,7 +110,7 @@ class MapController {
         try {
             this.printCLI();
             while ((in = scanner.nextLine()) != null) {
-                handleOut = this.handleInput(in, false);
+                handleOut = this.handleInput(in);
                 if (handleOut == null) {
                     System.out.println("Bye!");
                     break;
@@ -164,7 +178,7 @@ class MapController {
             info += "wsad - move up,down,left,right; ";
         if (this.map != null)
             info += "r - restart; ";
-        info += "l - list available maps; m - load map; e - reload external maps; q - quit\n> ";
+        info += "l - list available maps; m - load map; e - reload maps; q - quit\n> ";
         System.out.print(info);
     }
 
@@ -173,20 +187,18 @@ class MapController {
      * @throws Exception if map is invalid or programmer forgot something
      */
     void startGUI() throws Exception {
-
+        new GUI("Mazedea", this);
     }
 
     /**
      * Handles available input
      * @param in input string
-     * @param isGUI boolean
      * @return message
      * @throws Exception if map is invalid or programmer forgot something
      */
-    String handleInput(String in, boolean isGUI) throws Exception {
+    String handleInput(String in) throws Exception {
         String arg;
         String split[];
-        Map map;
         if (this.map != null && !this.victory) {
             if (in.equals("w")) {
                 if (!this.moveLogic("w"))
@@ -208,8 +220,7 @@ class MapController {
         }
         if (in.equals("r") && this.map != null) {
             try {
-                map = this.map;
-                this.setMap(this.returnMap(map.getName()));
+                this.setMap(this.returnMap(this.map.getName()));
                 this.victory = false;
                 return "Map reloaded";
             } catch (MapException e) {
@@ -237,7 +248,7 @@ class MapController {
             return "Invalid map name";
         } else if (in.equals("e")) {
             this.reloadMaps();
-            return "External maps reloaded";
+            return "Maps reloaded";
         } else if (in.equals("q")) {
             return null;
         }
