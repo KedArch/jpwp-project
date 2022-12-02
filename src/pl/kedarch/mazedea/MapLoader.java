@@ -111,7 +111,7 @@ class MapLoader {
         String line;
         int index = 0;
         Integer t;
-        Integer l;
+        ArrayList<Integer> links = new ArrayList<Integer>();
         MapElement tempElem;
         map = new Map();
         ArrayList<ArrayList<MapElement>> elemTypes = map.getElemTypes();
@@ -129,14 +129,16 @@ class MapLoader {
             }
             for (int i = 0; i < element.length; i++) {
                 try {
+                    links.clear();
                     if (element[i].contains(",")) {
                         tl = element[i].split(",");
                         t = Integer.parseInt(tl[0]);
-                        l = Integer.parseInt(tl[1]);
+                        for (int j = 1; j < tl.length; j++) {
+                            links.add(Integer.parseInt(tl[j]));
+                        }
                     } else {
                         t = Integer.parseInt(element[i]);
-                        l = null;
-                        for(Integer x : forbiddenWithoutComma){
+                        for (Integer x : forbiddenWithoutComma){
                             if (t == x) {
                                 throw new MapException("Found linkable object without specified link! Problem in map "+name+": row "+String.valueOf(index+1)+" column "+String.valueOf(i+1));
                             }
@@ -154,22 +156,22 @@ class MapLoader {
                         break;
                     case 2:
                         tempElem = new Gate();
-                        tempElem.setLink(l);
+                        tempElem.setLink((ArrayList<Integer>)links.clone());
                         lineTypes.add(tempElem);
                         break;
                     case 3:
                         tempElem = new Lever();
-                        tempElem.setLink(l);
+                        tempElem.setLink((ArrayList<Integer>)links.clone());
                         lineTypes.add(tempElem);
                         break;
                     case 4:
                         tempElem = new Door();
-                        tempElem.setLink(l);
+                        tempElem.setLink((ArrayList<Integer>)links.clone());
                         lineTypes.add(tempElem);
                         break;
                     case 5:
                         tempElem = new Key();
-                        tempElem.setLink(l);
+                        tempElem.setLink((ArrayList<Integer>)links.clone());
                         lineTypes.add(tempElem);
                         break;
                     case 6:

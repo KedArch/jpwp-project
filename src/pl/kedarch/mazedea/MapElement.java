@@ -1,5 +1,7 @@
 package pl.kedarch.mazedea;
 
+import java.util.ArrayList;
+
 /**
  * Abstract class used as base for map elements
  */
@@ -19,16 +21,16 @@ abstract class MapElement {
     abstract String getImageToggled();
     /**
      * Default empty function
-     * @param link number that links elements
+     * @param link numbers that link elements
      * @see pl.kedarch.mazedea.Linkable#setLink(int)
      */
-    void setLink(int link) {};
+    void setLink(ArrayList<Integer> link) {};
     /**
-     * Returns 0 by default
-     * @return 0
+     * Returns null by default
+     * @return null
      * @see pl.kedarch.mazedea.Linkable#getLink()
      */
-    int getLink() {return 0;};
+    ArrayList<Integer> getLink() {return null;};
     /**
      * Default empty function
      * @see pl.kedarch.mazedea.Toggleable#toggle()

@@ -273,6 +273,7 @@ class MapController {
         ArrayList<MapElement> keys = player.getKeys();
         Integer coords[] = player.getCoords();
         Integer move[] = new Integer[2];
+        boolean found = false;
         switch (direction) {
             case "w":
                 move[0] = 0;
@@ -320,8 +321,19 @@ class MapController {
                 for (int j = 0; j < elementsLine.size(); j++) {
                     toggledElementLine = elements.get(i);
                     toggledElement = toggledElementLine.get(j);
-                    if (new Gate().getClass().isInstance(toggledElement) && toggledElement.getLink() == element.getLink()) {
-                        toggledElement.toggle();
+                    if (new Gate().getClass().isInstance(toggledElement)) {
+                        found = false;
+                        for (Integer x : toggledElement.getLink()) {
+                            for (Integer y : element.getLink()) {
+                                if (x == y) {
+                                    found = true;
+                                    toggledElement.toggle();
+                                    break;
+                                }
+                            }
+                            if (found)
+                                break;
+                        }
                     }
                     toggledElementLine.set(j, toggledElement);
                     elements.set(i, toggledElementLine);
@@ -331,13 +343,22 @@ class MapController {
             if (element.isToggled()) {
                 coords[0] += move[0];
                 coords[1] += move[1];
-            } else if (element.getLink() != 0) {
+            } else if (element.getLink().size() > 0) {
                 for (MapElement key : keys) {
-                    if (key.getLink() == element.getLink()) {
-                        if (!element.isToggled())
-                            element.toggle();
-                        coords[0] += move[0];
-                        coords[1] += move[1];
+                    found = false;
+                    for (Integer x : key.getLink()) {
+                        for (Integer y : element.getLink()) {
+                            if (x == y) {
+                                found = true;
+                                if (!element.isToggled())
+                                        element.toggle();
+                                coords[0] += move[0];
+                                coords[1] += move[1];
+                                break;
+                            }
+                        }
+                        if (found)
+                            break;
                     }
                 }
                 if (!element.isToggled()) {
