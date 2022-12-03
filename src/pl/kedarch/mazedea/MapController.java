@@ -69,7 +69,7 @@ class MapController {
     }
 
     /**
-     * Gets exising map
+     * Gets existing map
      * @return map Map
      */
     Map getMap() {
