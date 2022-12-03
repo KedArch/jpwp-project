@@ -19,6 +19,10 @@ class MapController {
      * Holds info about victory
      */
     private boolean victory;
+    /**
+     * Holds info about user moves count
+     */
+    private int moves;
 
     /**
      * Create MapLoader object
@@ -91,6 +95,16 @@ class MapController {
     boolean getVictory() {
         return this.victory;
     }
+
+
+    /**
+     * Gets information about user move count
+     * @return moves int
+     */
+    int getMoves() {
+        return this.moves;
+    }
+
     /**
      * @return mapList ArrayList
      * @see pl.kedarch.mazedea.MapLoader#getMapNames()
@@ -222,6 +236,7 @@ class MapController {
             try {
                 this.setMap(this.returnMap(this.map.getName()));
                 this.victory = false;
+                this.moves = 0;
                 return "Map reloaded";
             } catch (MapException e) {
                 return e.toString();
@@ -243,6 +258,7 @@ class MapController {
             if (map != null) {
                 this.setMap(map);
                 this.victory = false;
+                this.moves = 0;
                 return "New map set";
             }
             return "Invalid map name";
@@ -379,6 +395,7 @@ class MapController {
         map.setElemTypes(elements);
         map.setPlayer(player);
         this.setMap(map);
+        this.moves++;
         return true;
     }
 }
