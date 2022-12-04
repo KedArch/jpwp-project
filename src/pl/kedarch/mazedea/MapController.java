@@ -62,17 +62,6 @@ class MapController {
     }
 
     /**
-     * Return new Map object from name
-     * @param name string
-     * @return map Map
-     * @throws MapException if map file is invalid
-     * @throws Exception if map is invalid or programmer forgot something
-     */
-    Map returnMap(String name) throws Exception {
-        return this.maps.returnMap(name);
-    }
-
-    /**
      * Gets existing map
      * @return map Map
      */
@@ -148,7 +137,7 @@ class MapController {
             ArrayList<ArrayList<MapElement>> elements = this.map.getElemTypes();
             ArrayList<MapElement> elementsLine;
             MapElement element;
-            for (int i = 0; i < elements.size()+2; i++) {
+            for (int i = 0; i < elements.get(0).size()+2; i++) {
                 System.out.print("+");
             }
             System.out.println();
@@ -170,7 +159,7 @@ class MapController {
                 System.out.print("+");
                 System.out.println();
             }
-            for (int i = 0; i < elements.size()+2; i++) {
+            for (int i = 0; i < elements.get(0).size()+2; i++) {
                 System.out.print("+");
             }
             System.out.println();
@@ -234,7 +223,7 @@ class MapController {
         }
         if (in.equals("r") && this.map != null) {
             try {
-                this.setMap(this.returnMap(this.map.getName()));
+                this.setMap(this.maps.returnMap(this.map.getName()));
                 this.victory = false;
                 this.moves = 0;
                 return "Map reloaded";
@@ -251,7 +240,7 @@ class MapController {
             split = in.split(" ");
             arg = split[1];
             try {
-                map = this.returnMap(arg);
+                map = this.maps.returnMap(arg);
             } catch (MapException e) {
                 return e.toString();
             }

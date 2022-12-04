@@ -465,7 +465,7 @@ class GUI extends JFrame {
         this.add(panel);
         this.add(paintPanel);
         this.setVisible(true);
-        this.control.handleInput("m tutorial");
+        System.err.println(this.control.handleInput("m tutorial"));
         this.updateGameInfo();
         this.paintPanel.repaint();
         this.paintPanel.requestFocusInWindow();
@@ -475,6 +475,8 @@ class GUI extends JFrame {
      * Updates infoArea
      */
     void updateGameInfo() {
+        if (this.control.getMap() == null)
+            return;
         String text = "Current map:\n"+this.control.getMap().getName()+"\n";
         String title = "Mazedea - "+this.control.getMap().getName();
         int keyCount = this.control.getMap().getPlayer().getKeys().size();
