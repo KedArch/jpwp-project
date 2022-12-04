@@ -78,7 +78,7 @@ class MapLoader {
      * Format 18x16
      * Every line corresponds to row in game<br>
      * Strings separated by semicolon are related to columns<br>
-     * Comma splits that string into 2 numbers, describing type and attribute<br>
+     * Comma splits that string into numbers, describing type and attributes<br>
      * Saved in map.elemAttribs, attributes are used to link gates, doors, keys and levers<br>
      * Saved in map.elemTypes, types describe entities present on map<br>
      * Type list:<br>
