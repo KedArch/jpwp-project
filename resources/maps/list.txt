@@ -1,1 +1,3 @@
-tutorial
+lvl0easy
+lvl1medium
+lvl2nightmare

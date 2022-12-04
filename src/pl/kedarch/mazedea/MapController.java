@@ -19,6 +19,10 @@ class MapController {
      * Holds info about victory
      */
     private boolean victory;
+    /**
+     * Holds info about user moves count
+     */
+    private int moves;
 
     /**
      * Create MapLoader object
@@ -58,18 +62,7 @@ class MapController {
     }
 
     /**
-     * Return new Map object from name
-     * @param name string
-     * @return map Map
-     * @throws MapException if map file is invalid
-     * @throws Exception if map is invalid or programmer forgot something
-     */
-    Map returnMap(String name) throws Exception {
-        return this.maps.returnMap(name);
-    }
-
-    /**
-     * Gets exising map
+     * Gets existing map
      * @return map Map
      */
     Map getMap() {
@@ -91,6 +84,16 @@ class MapController {
     boolean getVictory() {
         return this.victory;
     }
+
+
+    /**
+     * Gets information about user move count
+     * @return moves int
+     */
+    int getMoves() {
+        return this.moves;
+    }
+
     /**
      * @return mapList ArrayList
      * @see pl.kedarch.mazedea.MapLoader#getMapNames()
@@ -134,7 +137,7 @@ class MapController {
             ArrayList<ArrayList<MapElement>> elements = this.map.getElemTypes();
             ArrayList<MapElement> elementsLine;
             MapElement element;
-            for (int i = 0; i < elements.size()+2; i++) {
+            for (int i = 0; i < elements.get(0).size()+2; i++) {
                 System.out.print("+");
             }
             System.out.println();
@@ -156,7 +159,7 @@ class MapController {
                 System.out.print("+");
                 System.out.println();
             }
-            for (int i = 0; i < elements.size()+2; i++) {
+            for (int i = 0; i < elements.get(0).size()+2; i++) {
                 System.out.print("+");
             }
             System.out.println();
@@ -220,8 +223,9 @@ class MapController {
         }
         if (in.equals("r") && this.map != null) {
             try {
-                this.setMap(this.returnMap(this.map.getName()));
+                this.setMap(this.maps.returnMap(this.map.getName()));
                 this.victory = false;
+                this.moves = 0;
                 return "Map reloaded";
             } catch (MapException e) {
                 return e.toString();
@@ -236,13 +240,14 @@ class MapController {
             split = in.split(" ");
             arg = split[1];
             try {
-                map = this.returnMap(arg);
+                map = this.maps.returnMap(arg);
             } catch (MapException e) {
                 return e.toString();
             }
             if (map != null) {
                 this.setMap(map);
                 this.victory = false;
+                this.moves = 0;
                 return "New map set";
             }
             return "Invalid map name";
@@ -273,6 +278,7 @@ class MapController {
         ArrayList<MapElement> keys = player.getKeys();
         Integer coords[] = player.getCoords();
         Integer move[] = new Integer[2];
+        boolean found = false;
         switch (direction) {
             case "w":
                 move[0] = 0;
@@ -320,8 +326,19 @@ class MapController {
                 for (int j = 0; j < elementsLine.size(); j++) {
                     toggledElementLine = elements.get(i);
                     toggledElement = toggledElementLine.get(j);
-                    if (new Gate().getClass().isInstance(toggledElement) && toggledElement.getLink() == element.getLink()) {
-                        toggledElement.toggle();
+                    if (new Gate().getClass().isInstance(toggledElement)) {
+                        found = false;
+                        for (Integer x : toggledElement.getLink()) {
+                            for (Integer y : element.getLink()) {
+                                if (x == y) {
+                                    found = true;
+                                    toggledElement.toggle();
+                                    break;
+                                }
+                            }
+                            if (found)
+                                break;
+                        }
                     }
                     toggledElementLine.set(j, toggledElement);
                     elements.set(i, toggledElementLine);
@@ -331,13 +348,22 @@ class MapController {
             if (element.isToggled()) {
                 coords[0] += move[0];
                 coords[1] += move[1];
-            } else if (element.getLink() != 0) {
+            } else if (element.getLink().size() > 0) {
                 for (MapElement key : keys) {
-                    if (key.getLink() == element.getLink()) {
-                        if (!element.isToggled())
-                            element.toggle();
-                        coords[0] += move[0];
-                        coords[1] += move[1];
+                    found = false;
+                    for (Integer x : key.getLink()) {
+                        for (Integer y : element.getLink()) {
+                            if (x == y) {
+                                found = true;
+                                if (!element.isToggled())
+                                        element.toggle();
+                                coords[0] += move[0];
+                                coords[1] += move[1];
+                                break;
+                            }
+                        }
+                        if (found)
+                            break;
                     }
                 }
                 if (!element.isToggled()) {
@@ -358,6 +384,7 @@ class MapController {
         map.setElemTypes(elements);
         map.setPlayer(player);
         this.setMap(map);
+        this.moves++;
         return true;
     }
 }

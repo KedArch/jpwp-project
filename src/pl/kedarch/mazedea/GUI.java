@@ -91,13 +91,13 @@ class KeyInput extends KeyAdapter {
     public void keyTyped(KeyEvent e) {
         String out = "";
         try {
-            if (e.getKeyChar() == 'w') {
+            if (Character.toLowerCase(e.getKeyChar()) == 'w') {
                 out = this.gui.control.handleInput("w");
-            } else if (e.getKeyChar() == 's') {
+            } else if (Character.toLowerCase(e.getKeyChar()) == 's') {
                 out = this.gui.control.handleInput("s");
-            } else if (e.getKeyChar() == 'a') {
+            } else if (Character.toLowerCase(e.getKeyChar()) == 'a') {
                 out = this.gui.control.handleInput("a");
-            } else if (e.getKeyChar() == 'd') {
+            } else if (Character.toLowerCase(e.getKeyChar()) == 'd') {
                 out = this.gui.control.handleInput("d");
             } else {
                 out = this.gui.control.handleInput(out);
@@ -351,6 +351,10 @@ class GUI extends JFrame {
      * Quit button
      */
     AppJButton quitButton;
+    /**
+     * Contains info about controls
+     */
+    JTextArea controlsInfoArea;
 
     /**
      * Initializes GUI
@@ -391,7 +395,7 @@ class GUI extends JFrame {
         infoArea.setBounds(0, 0, 126, 128);
         infoArea.setFont(new Font("Comic Sans", Font.PLAIN, 15));
         infoArea.setForeground(Color.darkGray);
-        infoArea.setBackground(new Color(120,160,60));
+        infoArea.setBackground(new Color(120,180,60));
         infoArea.setBorder(BorderFactory.createLineBorder(new Color(0,100,0),1));
         infoArea.setOpaque(true);
         infoArea.setFocusable(false);
@@ -399,44 +403,58 @@ class GUI extends JFrame {
         mapSelection.setBounds(0, 128, 126, 30);
         mapSelection.setFont(new Font("Comic Sans", Font.PLAIN, 15));
         mapSelection.setForeground(Color.darkGray);
-        mapSelection.setBackground(new Color(120,160,60));
+        mapSelection.setBackground(new Color(120,200,60));
         mapSelection.setBorder(BorderFactory.createLineBorder(new Color(0,100,0),1));
         mapSelection.setSelectedIndex(0);
-        mapSelection.setFocusable(true);
+        mapSelection.setFocusable(false);
         mapSelectionButton = new AppJButton("<html>Load map<br>selected above");
         mapSelectionButton.setBounds(0, 158, 126, 50);
         mapSelectionButton.setFont(new Font("Comic Sans", Font.PLAIN, 13));
         mapSelectionButton.setForeground(Color.darkGray);
-        mapSelectionButton.setBackground(new Color(120,160,60));
+        mapSelectionButton.setBackground(new Color(120,200,60));
         mapSelectionButton.setBorder(BorderFactory.createLineBorder(new Color(0,100,0),1));
         mapSelectionButton.addActionListener(new BtnSelect(this));
         restartButton = new AppJButton("Restart map");
         restartButton.setBounds(0, 208, 126, 30);
         restartButton.setFont(new Font("Comic Sans", Font.PLAIN, 15));
         restartButton.setForeground(Color.darkGray);
-        restartButton.setBackground(new Color(120,160,60));
+        restartButton.setBackground(new Color(120,200,60));
         restartButton.setBorder(BorderFactory.createLineBorder(new Color(0,100,0),1));
         restartButton.addActionListener(new BtnRestart(this));
         reloadMapsButton = new AppJButton("Reload maps");
         reloadMapsButton.setBounds(0, 238, 126, 30);
         reloadMapsButton.setFont(new Font("Comic Sans", Font.PLAIN, 15));
         reloadMapsButton.setForeground(Color.darkGray);
-        reloadMapsButton.setBackground(new Color(120,160,60));
+        reloadMapsButton.setBackground(new Color(120,200,60));
         reloadMapsButton.setBorder(BorderFactory.createLineBorder(new Color(0,100,0),1));
         reloadMapsButton.addActionListener(new BtnReloadMaps(this));
         quitButton = new AppJButton("Quit");
         quitButton.setBounds(0, 268, 126, 30);
         quitButton.setFont(new Font("Comic Sans", Font.PLAIN, 15));
         quitButton.setForeground(Color.darkGray);
-        quitButton.setBackground(new Color(120,160,60));
+        quitButton.setBackground(new Color(120,200,60));
         quitButton.setBorder(BorderFactory.createLineBorder(new Color(0,100,0),1));
         quitButton.addActionListener(new BtnQuit(this));
+        controlsInfoArea = new JTextArea();
+        String controlsText = "Welcome to Mazedea!\n\nYour objective is to reach green square.\n\nOn the top right side game status is displayed.\n\nOn the map there are Keys, which can open Doors and Levers which toggle Gates (sometimes more than one of them).\n\nTo move character you can click on adjacent squares or use:\nw - to go up\ns - to go down\na - to go left\nd - to go right\nGood luck!\n\nCreated by Radosław Woźniak";
+        controlsInfoArea.setText(controlsText);
+        controlsInfoArea.setLineWrap(true);
+        controlsInfoArea.setWrapStyleWord(true);
+        controlsInfoArea.setEditable(false);
+        controlsInfoArea.setBounds(0, 298, 126, 726);
+        controlsInfoArea.setFont(new Font("Comic Sans", Font.PLAIN, 15));
+        controlsInfoArea.setForeground(Color.darkGray);
+        controlsInfoArea.setBackground(new Color(120,180,60));
+        controlsInfoArea.setBorder(BorderFactory.createLineBorder(new Color(0,100,0),1));
+        controlsInfoArea.setOpaque(true);
+        controlsInfoArea.setFocusable(false);
         panel.add(infoArea);
         panel.add(mapSelectionButton);
         panel.add(restartButton);
         panel.add(reloadMapsButton);
         panel.add(quitButton);
         panel.add(mapSelection);
+        panel.add(controlsInfoArea);
         paintPanel = new PaintPanel(this);
         paintPanel.setSize(1154, 1024);
         paintPanel.setLocation(0,0);
@@ -447,23 +465,33 @@ class GUI extends JFrame {
         this.add(panel);
         this.add(paintPanel);
         this.setVisible(true);
+        System.err.println(this.control.handleInput("m lvl0easy"));
+        this.updateGameInfo();
+        this.paintPanel.repaint();
+        this.paintPanel.requestFocusInWindow();
     }
 
     /**
      * Updates infoArea
      */
     void updateGameInfo() {
+        if (this.control.getMap() == null)
+            return;
         String text = "Current map:\n"+this.control.getMap().getName()+"\n";
+        String title = "Mazedea - "+this.control.getMap().getName();
         int keyCount = this.control.getMap().getPlayer().getKeys().size();
+        text += "Moves: "+this.control.getMoves()+"\n";
         if (this.control.getMap() != null && keyCount > 0) {
             text += "You have "+keyCount+" unknown key";
             if (keyCount > 1)
-                text += "s.\n";
-            else
-                text += ".\n";
+                text += "s";
+            text += ".\n";
         }
-        if (this.control.getVictory())
-            text += "\nVictory!";
+        if (this.control.getVictory()) {
+            text += "Victory!";
+            title += " - Victory!";
+        }
         this.infoArea.setText(text);
+        this.setTitle(title);
     }
 }
