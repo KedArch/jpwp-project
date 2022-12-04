@@ -16,8 +16,6 @@ It is a simple maze game made as serious game in mind, with levers, gates, doors
 ## Known bugs
 - none known at time of writing :)
 ## Todo
-- more than one link (to make Lever-Gate logic more flexible)
 - UI polishing
-- statistics (like move count and time)
 - map editor
 - more maps?
