@@ -91,13 +91,13 @@ class KeyInput extends KeyAdapter {
     public void keyTyped(KeyEvent e) {
         String out = "";
         try {
-            if (e.getKeyChar() == 'w') {
+            if (Character.toLowerCase(e.getKeyChar()) == 'w') {
                 out = this.gui.control.handleInput("w");
-            } else if (e.getKeyChar() == 's') {
+            } else if (Character.toLowerCase(e.getKeyChar()) == 's') {
                 out = this.gui.control.handleInput("s");
-            } else if (e.getKeyChar() == 'a') {
+            } else if (Character.toLowerCase(e.getKeyChar()) == 'a') {
                 out = this.gui.control.handleInput("a");
-            } else if (e.getKeyChar() == 'd') {
+            } else if (Character.toLowerCase(e.getKeyChar()) == 'd') {
                 out = this.gui.control.handleInput("d");
             } else {
                 out = this.gui.control.handleInput(out);
@@ -465,7 +465,7 @@ class GUI extends JFrame {
         this.add(panel);
         this.add(paintPanel);
         this.setVisible(true);
-        System.err.println(this.control.handleInput("m tutorial"));
+        System.err.println(this.control.handleInput("m lvl0easy"));
         this.updateGameInfo();
         this.paintPanel.repaint();
         this.paintPanel.requestFocusInWindow();
