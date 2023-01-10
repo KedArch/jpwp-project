@@ -22,7 +22,7 @@ abstract class MapElement {
     /**
      * Default empty function
      * @param link numbers that link elements
-     * @see pl.kedarch.mazedea.Linkable#setLink(int)
+     * @see pl.kedarch.mazedea.Linkable#setLink(ArrayList<Integer>)
      */
     void setLink(ArrayList<Integer> link) {};
     /**
